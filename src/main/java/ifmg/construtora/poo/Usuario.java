@@ -7,14 +7,16 @@ public class Usuario {
     private String cpf;
     private String telefone;
     private String senha;
+    private String papel;
     
     // Constructor
-    public Usuario(int id, String nome, String cpf, String telefone, String senha) {
+    public Usuario(int id, String nome, String cpf, String telefone, String senha, String papel) {
         this.setId(id);
         this.setNome(nome);
         this.setCpf(cpf);
         this.setTelefone(telefone);
         this.setSenha(senha);
+        this.setPapel(papel);
     }
     
     // Getters e setters
@@ -56,5 +58,13 @@ public class Usuario {
 
     public void setSenha(String senha) {
         this.senha = senha;
+    }
+
+    public String getPapel() {
+        return papel;
+    }
+
+    public void setPapel(String papel) {
+        this.papel = papel;
     }
 }
