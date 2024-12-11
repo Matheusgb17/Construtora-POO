@@ -1,19 +1,23 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package ifmg.construtora.poo;
 
 import java.time.LocalDate;
 
-/**
- *
- * @author Matal
- */
-public class Recebimento {
-    int id;
-    float valor;
-    LocalDate data;
-    Engenheiro engenheiro;
-    Cliente cliente;
+public class Recebimento extends Transferencia {
+    /* Descreve o pagamento de um cliente à construtora, ou seja, o recebimento
+    de um pagamento de um cliente por parte da construtora. */
+    
+    private Cliente cliente;
+
+    public Recebimento(Cliente cliente, int id, float valor, LocalDate data) {
+        super(id, valor, data);
+        this.setCliente(cliente);
+    }
+
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
+    }
 }

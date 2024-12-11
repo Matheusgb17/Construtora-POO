@@ -1,16 +1,21 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package ifmg.construtora.poo;
 
-/**
- *
- * @author Matal
- */
-public class Engenheiro {
-    int id;
-    String nome;
-    String cpf;
-    String crea;
+public class Engenheiro extends Usuario {
+    private String crea;
+    
+    // Constructor
+    public Engenheiro(String crea, int id, String nome, String cpf, String telefone, String senha) {
+        super(id, nome, cpf, telefone, senha);
+        this.setCrea(crea);
+    }
+    
+    // Getters e setters
+    public String getCrea() {
+        return crea;
+    }
+
+    public void setCrea(String crea) {
+        this.crea = crea;
+    }
+    
 }

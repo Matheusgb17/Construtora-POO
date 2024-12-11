@@ -1,19 +1,25 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package ifmg.construtora.poo;
 
-import java.time.LocalTime;
+import java.time.LocalDate;
 
-/**
- *
- * @author Matal
- */
-public class Pagamento {
-    int id;
-    float valor;
-    LocalTime data;
-    Engenheiro engenheiro;
-    Turma turma;
+public class Pagamento extends Transferencia {
+    /* Descreve o pagamento da construtora a um construtor. */
+    
+    private Construtor construtor;
+
+    // Constructor
+    public Pagamento(Construtor construtor, int id, float valor, LocalDate data) {
+        super(id, valor, data);
+        this.setConstrutor(construtor);
+    }
+    
+    // Getters e setters
+    public Construtor getConstrutor() {
+        return construtor;
+    }
+
+    public void setConstrutor(Construtor construtor) {
+        this.construtor = construtor;
+    }
+    
 }
