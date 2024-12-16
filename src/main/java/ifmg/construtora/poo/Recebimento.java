@@ -8,8 +8,8 @@ public class Recebimento extends Transferencia {
     
     private Cliente cliente;
 
-    public Recebimento(Cliente cliente, int id, float valor, LocalDate data) {
-        super(id, valor, data);
+    public Recebimento(Cliente cliente, int id, float valor, LocalDate data, Administrador administrador) {
+        super(id, valor, data, administrador);
         this.setCliente(cliente);
     }
 

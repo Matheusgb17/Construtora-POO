@@ -1,4 +1,4 @@
-package ifmg.construtora.poo;
+    package ifmg.construtora.poo;
 
 public class Administrador extends Usuario {
     private String cargo;
