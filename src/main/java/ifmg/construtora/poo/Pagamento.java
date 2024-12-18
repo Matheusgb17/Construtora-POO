@@ -8,8 +8,8 @@ public class Pagamento extends Transferencia {
     private Construtor construtor;
 
     // Constructor
-    public Pagamento(Construtor construtor, int id, float valor, LocalDate data) {
-        super(id, valor, data);
+    public Pagamento(Construtor construtor, int id, float valor, LocalDate data, Administrador administrador) {
+        super(id, valor, data, administrador);
         this.setConstrutor(construtor);
     }
     
