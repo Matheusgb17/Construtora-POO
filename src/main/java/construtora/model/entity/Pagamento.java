@@ -1,4 +1,4 @@
-package ifmg.construtora.poo;
+package construtora.model.entity;
 
 import java.time.LocalDate;
 
