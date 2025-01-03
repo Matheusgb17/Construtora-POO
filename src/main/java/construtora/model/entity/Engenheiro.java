@@ -1,4 +1,4 @@
-package ifmg.construtora.poo;
+package construtora.model.entity;
 
 public class Engenheiro extends Usuario {
     private String crea;

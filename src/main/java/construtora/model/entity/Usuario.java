@@ -1,4 +1,6 @@
-package ifmg.construtora.poo;
+package construtora.model.entity;
+
+import static utils.PasswordUtils.criptografarSenha;
 
 public class Usuario {
     // Atributos
@@ -57,7 +59,7 @@ public class Usuario {
     }
 
     public void setSenha(String senha) {
-        this.senha = senha;
+        this.senha = criptografarSenha(senha);
     }
 
     public String getPapel() {

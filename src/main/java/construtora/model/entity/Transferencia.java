@@ -1,4 +1,4 @@
-package ifmg.construtora.poo;
+package construtora.model.entity;
 
 import java.time.LocalDate;
 
@@ -10,7 +10,7 @@ public class Transferencia {
     
     // Constructor
 
-    public Transferencia(int id, float valor, LocalDate data) {
+    public Transferencia(int id, float valor, LocalDate data, Administrador administrador) {
         this.setId(id);
         this.setValor(valor);
         this.setData(data);

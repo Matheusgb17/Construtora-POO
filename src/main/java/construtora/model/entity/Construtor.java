@@ -1,4 +1,4 @@
-package ifmg.construtora.poo;
+package construtora.model.entity;
 
 public class Construtor extends Usuario {
     public String tipoServico;
