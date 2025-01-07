@@ -1,22 +1,23 @@
 package construtora.view;
 
-import construtora.model.dao.ClienteDAO;
-import construtora.model.entity.Usuario;
-import construtora.model.dao.UsuarioDAO;
-import construtora.model.entity.Cliente;
+import java.util.*;
+import construtora.model.service.*;
+import construtora.model.entity.*;
+import construtora.model.dao.*;
+import construtora.controller.*;
+import utils.*;
 
 public class Main {
 
     public static void main(String[] args) {
-        /*System.out.println("Hello World!");
-        //Usuario carlin = new Usuario(12, "Carlinhos", "12312312311", "(11)96640-1121", "Inhai123", "Operador");
-        UsuarioDAO dao = new UsuarioDAO();
-        //System.out.println(dao.create(carlin));
-        Usuario user = dao.find("12312312311");
-        System.out.println(user.getNome()); */
+        EngenheiroDAO ed = new EngenheiroDAO();
         
-        Cliente saiko = new Cliente("Ativo", 0, "SaikoMene", "22222222222", "11999999999", "Hello", "Cliente");
-        ClienteDAO cdao = new ClienteDAO();
-        cdao.create(saiko);
+        Engenheiro e1 = new Engenheiro("abc", 0, "Gabrielle", "12345678910", "1", "1", "Engenheiro");
+        Engenheiro e2 = new Engenheiro("cba", 0, "Nicolas", "09876543211", "2", "2", "Engenheiro");
+        Engenheiro e3 = new Engenheiro("bac", 0, "Miguel", "99999999999", "3", "3", "Engenheiro");
+        
+        //ed.create(e3);
+        
+        ed.delete(2);
     }
 }

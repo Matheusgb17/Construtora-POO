@@ -6,7 +6,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +16,15 @@ public class ClienteDAO {
     private final UsuarioDAO usuarioDAO = new UsuarioDAO();
     
     private final String tableName = "cliente";
+    
+    private Connection conexao;
+    
+    /**
+     * Construtor da classe
+     */
+    public ClienteDAO () {
+        this.conexao = Conexao.getConexao();
+    }
     
     /**
      * Adicionar um cliente ao banco de dados
@@ -35,7 +43,6 @@ public class ClienteDAO {
         String sql = "INSERT INTO " + this.tableName + " (usuario_id, status) VALUES (?, ?);";
         
         try (
-                Connection conexao = Conexao.getConexao();
                 PreparedStatement stmt = conexao.prepareStatement(sql)
             ) {
             
@@ -57,116 +64,206 @@ public class ClienteDAO {
      * @param id ID do cliente que quer se achar
      * @return TAD do cliente achado ou NULL
      */
-    public Cliente find (int id) {
-        String sqlUsuario = "SELECT * FROM " + this.usuarioDAO.getTableName() + " WHERE id = ?";
-        String sqlCliente = "SELECT * FROM " + this.getTableName() + " WHERE usuario_id = ?";
-        
+    public Cliente find(int id) {
+        String sqlCliente = "SELECT cliente.id, cliente.status, usuario.nome, usuario.cpf, usuario.telefone, usuario.senha, usuario.papel FROM cliente, usuario WHERE cliente.id = ? AND usuario.id = cliente.usuario_id"; 
+
         try (
-                Connection conn = Conexao.getConexao();
-                PreparedStatement stmtUsuario = conn.prepareStatement(sqlUsuario);
-                PreparedStatement stmtCliente = conn.prepareStatement(sqlCliente)) {
+             PreparedStatement stmtCliente = conexao.prepareStatement(sqlCliente)) {
 
-            stmtUsuario.setInt(1, id);
-            ResultSet rsUsuario = stmtUsuario.executeQuery();
-            if (!rsUsuario.next()) return null;
-
-            // Buscar na tabela `clientes`
             stmtCliente.setInt(1, id);
-            ResultSet rsCliente = stmtCliente.executeQuery();
-            
-            if (rsCliente.next()) {
-                Cliente cliente = new Cliente(
-                    rsUsuario.getString("status"), 
-                    rsUsuario.getInt("id"), 
-                    rsUsuario.getString("nome"), 
-                    rsUsuario.getString("cpf"), 
-                    rsUsuario.getString("telefone"), 
-                    rsUsuario.getString("senha"), 
-                    rsUsuario.getString("papel")
-                );
-                
-                return cliente;
+
+            try (ResultSet rsCliente = stmtCliente.executeQuery()) {
+                if (rsCliente.next()) {
+                    Cliente cliente = new Cliente(
+                        rsCliente.getString("status"),
+                        rsCliente.getInt("id"),
+                        rsCliente.getString("nome"),
+                        rsCliente.getString("cpf"),
+                        rsCliente.getString("telefone"),
+                        rsCliente.getString("senha"),
+                        rsCliente.getString("papel")
+                    );
+
+                    return cliente;
+                }
             }
+        } catch (SQLException e) {
+            e.printStackTrace(); // Substitua isso por um logger
         }
-        catch (SQLException e) {
-            e.printStackTrace();
-        }
-        
+
         return null;
     }
+
+
     
     /**
      * Retorna um cliente com base no CPF dele
      * @param cpf CPF do cliente que quer se achar
      * @return TAD do cliente achado ou NULL
      */
-    public Cliente find (String cpf) {
-        String sqlUsuario = "SELECT * FROM " + this.usuarioDAO.getTableName() + " WHERE id = ?";
+    public Cliente find(String cpf) {
+        String sqlUsuario = "SELECT * FROM " + this.usuarioDAO.getTableName() + " WHERE cpf = ?";
         String sqlCliente = "SELECT * FROM " + this.getTableName() + " WHERE usuario_id = ?";
-        
-        try (
-                Connection conn = Conexao.getConexao();
-                PreparedStatement stmtUsuario = conn.prepareStatement(sqlUsuario);
-                PreparedStatement stmtCliente = conn.prepareStatement(sqlCliente)) {
-            
-            /* Devemos primeiro achar o ID do usuário para achar o
-            registro correspondente na tabela de clientes. */
-            Usuario user = this.usuarioDAO.find(cpf);
-            int id = user.getId();
-            
-            // Busca na tabela de usuários
-            stmtUsuario.setInt(1, id);
-            ResultSet rsUsuario = stmtUsuario.executeQuery();
-            if (!rsUsuario.next()) return null;
 
-            // Buscar na tabela de clientes
-            stmtCliente.setInt(1, id);
+        try (
+             PreparedStatement stmtUsuario = conexao.prepareStatement(sqlUsuario);
+             PreparedStatement stmtCliente = conexao.prepareStatement(sqlCliente)) {
+
+            // Busca na tabela de usuários
+            stmtUsuario.setString(1, cpf);
+            ResultSet rsUsuario = stmtUsuario.executeQuery();
+
+            if (!rsUsuario.next()) {
+                return null; // Se o usuário não existir
+            }
+
+            // Pega o id do usuário
+            int idUsuario = rsUsuario.getInt("id");
+
+            // Busca na tabela de clientes
+            stmtCliente.setInt(1, idUsuario);
             ResultSet rsCliente = stmtCliente.executeQuery();
-            
+
             if (rsCliente.next()) {
+                // Se o cliente existir, cria o objeto Cliente
                 Cliente cliente = new Cliente(
-                    rsUsuario.getString("status"), 
-                    rsUsuario.getInt("id"), 
-                    rsUsuario.getString("nome"), 
-                    rsUsuario.getString("cpf"), 
-                    rsUsuario.getString("telefone"), 
-                    rsUsuario.getString("senha"), 
+                    rsCliente.getString("status"),
+                    rsCliente.getInt("id"),
+                    rsUsuario.getString("nome"),
+                    rsUsuario.getString("cpf"),
+                    rsUsuario.getString("telefone"),
+                    rsUsuario.getString("senha"),
                     rsUsuario.getString("papel")
                 );
-                
                 return cliente;
             }
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
-        
         return null;
     }
+
     
-    public List<Cliente> findAll () {
+    /**
+     * Atualiza as informações de um determinado cliente
+     *
+     * @param cliente TAD do cliente já com os dados atualizados
+     */
+    public void update(Cliente cliente) {
+        String sqlFindUsuarioId = "SELECT usuario_id FROM " + this.getTableName() + " WHERE id = ?";
+        String sqlUsuario = "UPDATE " + this.usuarioDAO.getTableName()
+                + " SET nome = ?, cpf = ?, telefone = ?, senha = ?, papel = ? "
+                + "WHERE id = ?";
+        String sqlCliente = "UPDATE " + this.getTableName()
+                + " SET status = ? WHERE id = ?";
+
+        try ( PreparedStatement stmtFindUsuarioId = conexao.prepareStatement(sqlFindUsuarioId); PreparedStatement stmtUsuario = conexao.prepareStatement(sqlUsuario); PreparedStatement stmtCliente = conexao.prepareStatement(sqlCliente)) {
+
+            // Buscar o usuario_id correspondente ao cliente
+            stmtFindUsuarioId.setInt(1, cliente.getId());
+            ResultSet rs = stmtFindUsuarioId.executeQuery();
+
+            if (!rs.next()) {
+                throw new SQLException("Cliente com ID " + cliente.getId() + " não encontrado.");
+            }
+            int usuarioId = rs.getInt("usuario_id");
+
+            // Atualiza os dados do usuário
+            stmtUsuario.setString(1, cliente.getNome());
+            stmtUsuario.setString(2, cliente.getCpf());
+            stmtUsuario.setString(3, cliente.getTelefone());
+            stmtUsuario.setString(4, cliente.getSenha());
+            stmtUsuario.setString(5, cliente.getPapel());
+            stmtUsuario.setInt(6, usuarioId);
+            stmtUsuario.executeUpdate();
+
+            // Atualiza os dados do cliente
+            stmtCliente.setString(1, cliente.getStatus());
+            stmtCliente.setInt(2, cliente.getId());
+            stmtCliente.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    
+    /**
+     * Retorna todos os clientes cadastrados no banco
+     *
+     * @return ArrayList com todos os dados dos clientes
+     */
+    public List<Cliente> findAll() {
         List<Cliente> clientes = new ArrayList<>();
-        
+        String sql = "SELECT c.id AS cliente_id, c.status, u.id AS usuario_id, u.nome, u.cpf, u.telefone, u.senha, u.papel "
+                + "FROM " + this.getTableName() + " c "
+                + "JOIN " + this.usuarioDAO.getTableName() + " u ON c.usuario_id = u.id";
+
+        try ( PreparedStatement stmt = conexao.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                Cliente cliente = new Cliente(
+                        rs.getString("status"),
+                        rs.getInt("cliente_id"),
+                        rs.getString("nome"),
+                        rs.getString("cpf"),
+                        rs.getString("telefone"),
+                        rs.getString("senha"),
+                        rs.getString("papel")
+                );
+                clientes.add(cliente);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
         return clientes;
     }
+
     
     /**
-     * Deletar um cliente de acordo com um ID
+     * Deletar um cliente de acordo com um ID de cliente
+     *
      * @param id ID do cliente a ser deletado
      */
-    public void delete (int id) {
-        this.usuarioDAO.delete(id);
-        // O método de deleção deve ser CASCADE para isso funcionar
+    public void delete(int id) {
+        String sql = "SELECT usuario_id FROM " + this.getTableName() + " WHERE id = ?";
+        try (PreparedStatement stmt = conexao.prepareStatement(sql)) {
+
+            // Busca o `usuario_id` correspondente ao `id` do cliente
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                int usuarioId = rs.getInt("usuario_id");
+
+                // Deleta o usuário associado, cascata garante que cliente será deletado
+                this.usuarioDAO.delete(usuarioId);
+            } else {
+                System.out.println("Cliente não encontrado com o ID fornecido.");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
-    
+
     /**
      * Deletar um cliente de acordo com um CPF
+     *
      * @param cpf CPF do cliente a ser deletado
      */
-    public void delete (String cpf) {
-        this.usuarioDAO.delete(cpf);
-        // O método de deleção deve ser CASCADE para isso funcionar
+    public void delete(String cpf) {
+        Usuario usuario = this.usuarioDAO.find(cpf);
+        if (usuario != null) {
+            // Deleta o usuário associado, cascata garante que cliente será deletado
+            this.usuarioDAO.delete(usuario.getId());
+        } else {
+            System.out.println("Usuário não encontrado com o CPF fornecido.");
+        }
     }
+
     
     // Getters e setters
     public String getTableName() {
