@@ -1,7 +1,7 @@
 package construtora.model.entity;
 
 public class Cliente extends Usuario {
-    public String status;
+    private String status;
 
     // Constructor
 
@@ -19,4 +19,13 @@ public class Cliente extends Usuario {
     public void setStatus(String status) {
         this.status = status;
     }
+
+    @Override
+    public String toString() {
+        return "Cliente{" + "status=" + status + "; id=" + this.getId() + "}";
+    }
+
+    
+    
+    
 }

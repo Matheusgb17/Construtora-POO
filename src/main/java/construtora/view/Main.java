@@ -1,12 +1,23 @@
 package construtora.view;
 
-import construtora.model.entity.Usuario;
+import java.util.*;
+import construtora.model.service.*;
+import construtora.model.entity.*;
+import construtora.model.dao.*;
+import construtora.controller.*;
+import utils.*;
 
 public class Main {
 
     public static void main(String[] args) {
-        System.out.println("Hello World!");
-        Usuario carlin = new Usuario(12, "Carlinhos", "444.334.122-12", "(11)96640-1121", "Inhai123", "Operador");
-        System.out.println("Senha: " + carlin.getSenha());
+        EngenheiroDAO ed = new EngenheiroDAO();
+        
+        Engenheiro e1 = new Engenheiro("abc", 0, "Gabrielle", "12345678910", "1", "1", "Engenheiro");
+        Engenheiro e2 = new Engenheiro("cba", 0, "Nicolas", "09876543211", "2", "2", "Engenheiro");
+        Engenheiro e3 = new Engenheiro("bac", 0, "Miguel", "99999999999", "3", "3", "Engenheiro");
+        
+        //ed.create(e3);
+        
+        ed.delete(2);
     }
 }

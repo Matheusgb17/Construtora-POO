@@ -4,13 +4,24 @@ public class Obra {
     private int id;
     private String endereco;
     private String tipoObra;
+    private String status;
+    private Cliente cliente;
     
     // Constructor
-    public Obra(int id, String endereco, String tipoObra) {
+    public Obra(int id, String endereco, String tipoObra, String status, Cliente cliente) {
         this.setId(id);
         this.setEndereco(endereco);
         this.setTipoObra(tipoObra);
+        this.setStatus(status);
+        this.setCliente(cliente);
     }
+
+    @Override
+    public String toString() {
+        return "Obra{" + "id=" + id + ", endereco=" + endereco + ", tipoObra=" + tipoObra + ", status=" + status + '}';
+    }
+    
+    
     
     // Getters e setters
     public int getId() {
@@ -36,5 +47,22 @@ public class Obra {
     public void setTipoObra(String tipoObra) {
         this.tipoObra = tipoObra;
     }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
+    }
+    
     
 }
