@@ -16,8 +16,8 @@ public class Main {
         Engenheiro e2 = new Engenheiro("cba", 0, "Nicolas", "09876543211", "2", "2", "Engenheiro");
         Engenheiro e3 = new Engenheiro("bac", 0, "Miguel", "99999999999", "3", "3", "Engenheiro");
         
-        //ed.create(e3);
-        
-        ed.delete(2);
+        ed.create(e1);
+        ed.create(e2);
+        ed.create(e3);
     }
 }
