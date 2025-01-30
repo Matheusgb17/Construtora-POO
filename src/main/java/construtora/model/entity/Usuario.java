@@ -10,7 +10,7 @@ public class Usuario {
     private String telefone;
     private String senha;
     private String papel;
-    
+
     // Constructor
     public Usuario(int id, String nome, String cpf, String telefone, String senha, String papel) {
         this.setId(id);
@@ -20,7 +20,12 @@ public class Usuario {
         this.setSenha(senha);
         this.setPapel(papel);
     }
-    
+    public Usuario() {
+
+    }
+
+
+
     // Getters e setters
     public int getId() {
         return id;

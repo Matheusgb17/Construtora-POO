@@ -2,10 +2,8 @@ package construtora.model.dao;
 
 import construtora.model.entity.Cliente;
 import construtora.model.entity.Usuario;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,74 +12,85 @@ public class ClienteDAO {
      * Variável necessária para acessar a tabela de usuário referente ao cliente, uma vez que este é herança.
      */
     private final UsuarioDAO usuarioDAO = new UsuarioDAO();
-    
+
     private final String tableName = "cliente";
-    
+
     private Connection conexao;
-    
+
     /**
      * Construtor da classe
      */
     public ClienteDAO () {
         this.conexao = Conexao.getConexao();
     }
-    
+
     /**
      * Adicionar um cliente ao banco de dados
      * @param cliente TAD do cliente a ser inserido
      */
-    public void create (Cliente cliente) {
+    public  int create(Cliente cliente) {
         /* Inserindo os dados base na tabela de usuários.
          * Isso é possível pois Cliente herda de Usuario. */
+        int codigoGerado = -1;
+        cliente.setPapel(getTableName());
         int usuarioId = this.usuarioDAO.create(cliente);
-        
+
+
         if (usuarioId == -1) {
             System.out.println("=== ERRO AO INSERIR NA TABELA DE USUÁRIOS ===");
-            return;
+            return -1;
         }
-        
+
         String sql = "INSERT INTO " + this.tableName + " (usuario_id, status) VALUES (?, ?);";
-        
+
         try (
-                PreparedStatement stmt = conexao.prepareStatement(sql)
-            ) {
-            
+                PreparedStatement stmt = conexao.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)
+        ) {
+
             stmt.setInt(1, usuarioId);
             stmt.setString(2, cliente.getStatus());
-            
+
             stmt.executeUpdate();
-            
+
             System.out.println("Cliente inserido com sucesso!");
-            
+
+            // Obter o ID gerado
+            ResultSet rs = stmt.getGeneratedKeys();
+            if (rs.next()) {
+                codigoGerado = rs.getInt(1);
+            }
+            rs.close();
         }
         catch (SQLException e) {
             e.printStackTrace();
+
         }
+        return codigoGerado;
     }
-    
+
     /**
      * Retorna um cliente com base no ID dele
      * @param id ID do cliente que quer se achar
      * @return TAD do cliente achado ou NULL
      */
     public Cliente find(int id) {
-        String sqlCliente = "SELECT cliente.id, cliente.status, usuario.nome, usuario.cpf, usuario.telefone, usuario.senha, usuario.papel FROM cliente, usuario WHERE cliente.id = ? AND usuario.id = cliente.usuario_id"; 
+        String sqlCliente = "SELECT cliente.id, cliente.status, usuario.nome, usuario.cpf, usuario.telefone, usuario.senha, usuario.papel FROM cliente, usuario WHERE cliente.id = ? AND usuario.id = cliente.usuario_id";
 
         try (
-             PreparedStatement stmtCliente = conexao.prepareStatement(sqlCliente)) {
+                PreparedStatement stmtCliente = conexao.prepareStatement(sqlCliente)) {
 
             stmtCliente.setInt(1, id);
 
             try (ResultSet rsCliente = stmtCliente.executeQuery()) {
                 if (rsCliente.next()) {
                     Cliente cliente = new Cliente(
-                        rsCliente.getString("status"),
-                        rsCliente.getInt("id"),
-                        rsCliente.getString("nome"),
-                        rsCliente.getString("cpf"),
-                        rsCliente.getString("telefone"),
-                        rsCliente.getString("senha"),
-                        rsCliente.getString("papel")
+                            rsCliente.getString("status"),
+                            rsCliente.getInt("id"),
+                            rsCliente.getString("nome"),
+                            rsCliente.getString("cpf"),
+                            rsCliente.getString("telefone"),
+                            rsCliente.getString("senha"),
+                            rsCliente.getString("papel")
                     );
 
                     return cliente;
@@ -94,8 +103,6 @@ public class ClienteDAO {
         return null;
     }
 
-
-    
     /**
      * Retorna um cliente com base no CPF dele
      * @param cpf CPF do cliente que quer se achar
@@ -106,8 +113,8 @@ public class ClienteDAO {
         String sqlCliente = "SELECT * FROM " + this.getTableName() + " WHERE usuario_id = ?";
 
         try (
-             PreparedStatement stmtUsuario = conexao.prepareStatement(sqlUsuario);
-             PreparedStatement stmtCliente = conexao.prepareStatement(sqlCliente)) {
+                PreparedStatement stmtUsuario = conexao.prepareStatement(sqlUsuario);
+                PreparedStatement stmtCliente = conexao.prepareStatement(sqlCliente)) {
 
             // Busca na tabela de usuários
             stmtUsuario.setString(1, cpf);
@@ -127,13 +134,13 @@ public class ClienteDAO {
             if (rsCliente.next()) {
                 // Se o cliente existir, cria o objeto Cliente
                 Cliente cliente = new Cliente(
-                    rsCliente.getString("status"),
-                    rsCliente.getInt("id"),
-                    rsUsuario.getString("nome"),
-                    rsUsuario.getString("cpf"),
-                    rsUsuario.getString("telefone"),
-                    rsUsuario.getString("senha"),
-                    rsUsuario.getString("papel")
+                        rsCliente.getString("status"),
+                        rsCliente.getInt("id"),
+                        rsUsuario.getString("nome"),
+                        rsUsuario.getString("cpf"),
+                        rsUsuario.getString("telefone"),
+                        rsUsuario.getString("senha"),
+                        rsUsuario.getString("papel")
                 );
                 return cliente;
             }
@@ -143,7 +150,7 @@ public class ClienteDAO {
         return null;
     }
 
-    
+
     /**
      * Atualiza as informações de um determinado cliente
      *
@@ -188,7 +195,7 @@ public class ClienteDAO {
     }
 
 
-    
+
     /**
      * Retorna todos os clientes cadastrados no banco
      *
@@ -222,7 +229,7 @@ public class ClienteDAO {
         return clientes;
     }
 
-    
+
     /**
      * Deletar um cliente de acordo com um ID de cliente
      *
@@ -264,7 +271,7 @@ public class ClienteDAO {
         }
     }
 
-    
+
     // Getters e setters
     public String getTableName() {
         return tableName;

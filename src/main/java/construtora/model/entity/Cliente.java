@@ -9,6 +9,12 @@ public class Cliente extends Usuario {
         super(id, nome, cpf, telefone, senha, papel);
         this.setStatus(status);
     }
+
+    public Cliente() {
+        super(0,"","","","","");
+
+
+    }
     
     
     // Getters e setters
