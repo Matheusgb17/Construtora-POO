@@ -27,13 +27,15 @@ public class AdministradorService {
         if (utils.CPFUtils.validarCPF(cliente.getCpf()) == false) {
             System.out.println("Insira os dados novamente!\n");
             cadastrarCliente(cliente);
+            return;
         }
         System.out.println("Digite o telefone do cliente: ");
         cliente.setTelefone(scanner.nextLine());
         if (utils.TelefoneUtils.validarTelefone(cliente.getTelefone()) == false) {
             System.out.println("Insira os dados novamente!\n");
             cadastrarCliente(cliente);
-        };
+            return;
+        }
         /*A senha de primeiro acesso será os 4 ultimos dígitos do telefone do cliente, a ideia é que após o primeiro acesso
         o usuário altere a senha.*/
         String senha = cliente.getTelefone().substring(cliente.getTelefone().length() - 4);
@@ -63,12 +65,14 @@ public class AdministradorService {
         if (utils.CPFUtils.validarCPF(funcionario.getCpf()) == false) {
             System.out.println("Insira os dados novamente!\n");
             cadastrarFuncionario(funcionario, construtor);
+            return;
         }
         System.out.println("Digite o telefone do funcionario: ");
         funcionario.setTelefone(scanner.nextLine());
         if (utils.TelefoneUtils.validarTelefone(funcionario.getCpf()) == false) {
             System.out.println("Insira os dados novamente!\n");
             cadastrarFuncionario(funcionario, construtor);
+            return;
         }
         System.out.println("Digite o cargo do funcionario: ");
         funcionario.setCargo(scanner.nextLine());
@@ -97,12 +101,14 @@ public class AdministradorService {
         if (utils.CPFUtils.validarCPF(construtor.getCpf()) == false) {
             System.out.println("Insira os dados novamente!\n");
             cadastrarConstrutor(construtor);
+            return;
         }
         System.out.println("Digite o telefone do construtor: ");
         construtor.setTelefone(scanner.nextLine());
         if (utils.TelefoneUtils.validarTelefone(construtor.getCpf()) == false) {
             System.out.println("Insira os dados novamente!\n");
             cadastrarConstrutor(construtor);
+            return;
         }
         System.out.println("Digite o tipo de serviço do construtor: ");
         construtor.setTipoServico(scanner.nextLine());
