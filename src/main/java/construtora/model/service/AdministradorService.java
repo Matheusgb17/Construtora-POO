@@ -20,13 +20,20 @@ public class AdministradorService {
     public void cadastrarCliente (Cliente cliente) {
 
         //Informando os dados do cliente
-        scanner.nextLine();
         System.out.println("Digite o nome do cliente: ");
         cliente.setNome(scanner.nextLine());
         System.out.println("Digite o cpf do cliente: ");
         cliente.setCpf(scanner.nextLine());
+        if (utils.CPFUtils.validarCPF(cliente.getCpf()) == false) {
+            System.out.println("Insira os dados novamente!\n");
+            cadastrarCliente(cliente);
+        }
         System.out.println("Digite o telefone do cliente: ");
         cliente.setTelefone(scanner.nextLine());
+        if (utils.TelefoneUtils.validarTelefone(cliente.getTelefone()) == false) {
+            System.out.println("Insira os dados novamente!\n");
+            cadastrarCliente(cliente);
+        };
         /*A senha de primeiro acesso será os 4 ultimos dígitos do telefone do cliente, a ideia é que após o primeiro acesso
         o usuário altere a senha.*/
         String senha = cliente.getTelefone().substring(cliente.getTelefone().length() - 4);
@@ -53,8 +60,16 @@ public class AdministradorService {
         funcionario.setNome(scanner.nextLine());
         System.out.println("Digite o cpf do funcionario: ");
         funcionario.setCpf(scanner.nextLine());
+        if (utils.CPFUtils.validarCPF(funcionario.getCpf()) == false) {
+            System.out.println("Insira os dados novamente!\n");
+            cadastrarFuncionario(funcionario, construtor);
+        }
         System.out.println("Digite o telefone do funcionario: ");
         funcionario.setTelefone(scanner.nextLine());
+        if (utils.TelefoneUtils.validarTelefone(funcionario.getCpf()) == false) {
+            System.out.println("Insira os dados novamente!\n");
+            cadastrarFuncionario(funcionario, construtor);
+        }
         System.out.println("Digite o cargo do funcionario: ");
         funcionario.setCargo(scanner.nextLine());
         /*A senha de primeiro acesso será os 4 ultimos dígitos do telefone do funcionario, a ideia é que após o primeiro acesso
@@ -79,8 +94,16 @@ public class AdministradorService {
         construtor.setNome(scanner.nextLine());
         System.out.println("Digite o cpf do construtor: ");
         construtor.setCpf(scanner.nextLine());
+        if (utils.CPFUtils.validarCPF(construtor.getCpf()) == false) {
+            System.out.println("Insira os dados novamente!\n");
+            cadastrarConstrutor(construtor);
+        }
         System.out.println("Digite o telefone do construtor: ");
         construtor.setTelefone(scanner.nextLine());
+        if (utils.TelefoneUtils.validarTelefone(construtor.getCpf()) == false) {
+            System.out.println("Insira os dados novamente!\n");
+            cadastrarConstrutor(construtor);
+        }
         System.out.println("Digite o tipo de serviço do construtor: ");
         construtor.setTipoServico(scanner.nextLine());
         /*A senha de primeiro acesso será os 4 ultimos dígitos do telefone do cliente, a ideia é que após o primeiro acesso
