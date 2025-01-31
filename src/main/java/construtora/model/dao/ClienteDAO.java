@@ -42,18 +42,13 @@ public class ClienteDAO {
         }
 
         String sql = "INSERT INTO " + this.tableName + " (usuario_id, status) VALUES (?, ?);";
-
         try (
                 PreparedStatement stmt = conexao.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)
         ) {
-
             stmt.setInt(1, usuarioId);
             stmt.setString(2, cliente.getStatus());
-
             stmt.executeUpdate();
-
             System.out.println("Cliente inserido com sucesso!");
-
             // Obter o ID gerado
             ResultSet rs = stmt.getGeneratedKeys();
             if (rs.next()) {

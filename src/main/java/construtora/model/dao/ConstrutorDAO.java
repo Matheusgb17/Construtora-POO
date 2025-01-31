@@ -2,10 +2,8 @@ package construtora.model.dao;
 
 import construtora.model.entity.Construtor;
 import construtora.model.entity.Usuario;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,33 +28,37 @@ public class ConstrutorDAO {
      * Adicionar um construtor ao banco de dados
      * @param construtor TAD do construtor a ser inserido
      */
-    public void create (Construtor construtor) {
+    public int create (Construtor construtor) {
         /* Inserindo os dados base na tabela de usuários.
          * Isso é possível pois Construtor herda de Usuario. */
+        int codigoGerado = -1;
+        construtor.setPapel(getTableName());
         int usuarioId = this.usuarioDAO.create(construtor);
         
         if (usuarioId == -1) {
             System.out.println("=== ERRO AO INSERIR NA TABELA DE USUÁRIOS ===");
-            return;
+            return -1;
         }
         
         String sql = "INSERT INTO " + this.tableName + " (usuario_id, tipoServico) VALUES (?, ?);";
-        
         try (
-                PreparedStatement stmt = conexao.prepareStatement(sql)
+                PreparedStatement stmt = conexao.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)
             ) {
-            
             stmt.setInt(1, usuarioId);
             stmt.setString(2, construtor.getTipoServico());
-            
             stmt.executeUpdate();
-            
             System.out.println("Construtor inserido com sucesso!");
-            
+            // Obter o ID gerado
+            ResultSet rs = stmt.getGeneratedKeys();
+            if (rs.next()) {
+                codigoGerado = rs.getInt(1);
+            }
+            rs.close();
         }
         catch (SQLException e) {
             e.printStackTrace();
         }
+        return codigoGerado;
     }
     
     /**
@@ -65,7 +67,7 @@ public class ConstrutorDAO {
      * @return TAD do construtor achado ou NULL
      */
     public Construtor find(int id) {
-        String sqlConstrutor = "SELECT construtor.id, construtor.tipoServico, usuario.nome, usuario.cpf, usuario.telefone, usuario.senha, usuario.papel FROM construtor, usuario WHERE construtor.id = ? AND usuario.id = construtor.usuario_id"; 
+        String sqlConstrutor = "SELECT construtor.id, construtor.tipoServico, usuario.nome, usuario.cpf, usuario.telefone, usuario.senha, usuario.papel FROM construtor, usuario WHERE usuario_id = ? AND usuario.id = construtor.usuario_id";
 
         try (
              PreparedStatement stmtConstrutor = conexao.prepareStatement(sqlConstrutor)) {
@@ -83,7 +85,7 @@ public class ConstrutorDAO {
                         rsConstrutor.getString("senha"),
                         rsConstrutor.getString("papel")
                     );
-
+                        System.out.println("Construtor encontrado com sucesso!" + construtor.getId());
                     return construtor;
                 }
             }
@@ -133,6 +135,7 @@ public class ConstrutorDAO {
                     rsUsuario.getString("senha"),
                     rsUsuario.getString("papel")
                 );
+                System.out.println("Construtor: " + construtor.getNome());
                 return construtor;
             }
         } catch (SQLException e) {

@@ -10,6 +10,10 @@ public class Funcionario extends Usuario {
         this.setCargo(cargo);
         this.setConstrutor(construtor);
     }
+
+    public Funcionario() {
+
+    }
     
     // Getters e setters
     public String getCargo() {

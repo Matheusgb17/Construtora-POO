@@ -9,6 +9,10 @@ public class Construtor extends Usuario {
         super(id, nome, cpf, telefone, senha, papel);
         this.setTipoServico(tipoServico);
     }
+
+    public Construtor() {
+
+    }
     
 
     // Getters e setters

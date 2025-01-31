@@ -10,7 +10,7 @@ import construtora.controller.*;
 import static utils.PasswordUtils.criptografarSenha;
 public class Login {
 
-    public static void main(String[] args) {
+    public static void login() {
         Scanner scanner = new Scanner(System.in);
         LoginDAO loginDAO = new LoginDAO();
         AdministradorService administradorService = new AdministradorService();
@@ -46,14 +46,18 @@ public class Login {
                         switch (usuario.getPapel()) {
                             case "cliente":
                                 //controller de cliente
+                                usuarioController.uController(usuario);
                                 break;
                             case "engenheiro":
                                 //controller de engenheiro
+                                usuarioController.uController(usuario);
                                 break;
                             case "construtor":
                                 //controller de construtor
+                                usuarioController.uController(usuario);
                                 break;
                             case "administrador":
+                                //cpmtroller de administrador
                                 usuarioController.uController(usuario);
                                 break;
                             default:

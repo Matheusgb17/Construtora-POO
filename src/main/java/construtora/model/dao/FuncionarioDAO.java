@@ -18,23 +18,38 @@ public class FuncionarioDAO {
         this.conexao = Conexao.getConexao();
     }
 
-    public void create(Funcionario funcionario) {
+    public int create(Funcionario funcionario) {
+        /* Inserindo os dados base na tabela de usuários.
+         * Isso é possível pois Funcionario herda de Usuario. */
+        int codigoGerado = -1;
+        funcionario.setPapel(getTableName());
         int usuarioId = this.usuarioDAO.create(funcionario);
+
+
+
         if (usuarioId == -1) {
             System.out.println("=== ERRO AO INSERIR NA TABELA USUARIO ===");
-            return;
+            return -1;
         }
 
         String sql = "INSERT INTO " + this.tableName + " (usuario_id, cargo, construtor_id) VALUES (?, ?, ?)";
-        try (PreparedStatement stmt = conexao.prepareStatement(sql)) {
+        try (PreparedStatement stmt = conexao.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setInt(1, usuarioId);
             stmt.setString(2, funcionario.getCargo());
             stmt.setInt(3, funcionario.getConstrutor().getId());
             stmt.executeUpdate();
             System.out.println("Funcionario inserido com sucesso!");
-        } catch (SQLException e) {
+            // Obter o ID gerado
+            ResultSet rs = stmt.getGeneratedKeys();
+            if (rs.next()) {
+                codigoGerado = rs.getInt(1);
+            }
+            rs.close();
+        }
+        catch (SQLException e) {
             e.printStackTrace();
         }
+        return codigoGerado;
     }
 
     public Funcionario find(int id) {

@@ -10,38 +10,34 @@ public class papelMenu {
         System.out.println("\nMenu " + usuario.getPapel());
 
         switch (usuario.getPapel()) {
-            case "administrador":
+            case "administrador", "construtor":
                 System.out.println("1 - Cadastros");
                 System.out.println("2 - Obras");
                 System.out.println("3 - Contratos");
                 System.out.println("4 - Sair");
-            break;
+                break;
 
             case "engenheiro":
                 //opcoes engenheiro
-            break;
-
-            case "construtor":
-                //opcoes construtor
-            break;
+                break;
 
             case "cliente":
                 //opcoes cliente
-            break;
+                break;
             default:
                 System.out.println("Acesso negado!");
-            break;
+                break;
         }
 
     }
 
-    public static int opcaoCadastroAdmin() {
+    public static int opcaoCadastroAdmin(Usuario usuario) {
         int opcao;
         do {
             System.out.println("Selecione o tipo de usuario: ");
             System.out.println("1 - Cliente");
-            System.out.println("2 - Funcionario ");
-            System.out.println("3 - Construtor");
+            System.out.println("2 - Construtor");
+            System.out.println("3 - Funcionario");
             System.out.println("4 - Engenheiro");
             System.out.println("5 - Sair");
 
@@ -50,18 +46,33 @@ public class papelMenu {
             switch (opcao) {
                 case 1:
                     System.out.println("\n1 - Adicionar cliente ");
-                    System.out.println("2 - Alterar cliente ");
-                    System.out.println("3 - Buscar cliente ");
-                    System.out.println("4 - Excluir cliente ");
-                    System.out.println("5 - Sair");
+                    System.out.println("2 - Sair");
+                    opcao = scanner.nextInt();
                     return opcao;
                 case 2:
-                    break;
+                    System.out.println("\n1 - Adicionar construtor ");
+                    System.out.println("2 - Sair");
+                    opcao = scanner.nextInt();
+                    if(opcao == 1) {
+                        return 2;
+                    } else if(opcao == 2) {
+                        break;
+                    }
+                    return opcao;
 
                 case 3:
-                    break;
+                    System.out.println("\n1 - Adicionar funcionario ");
+                    System.out.println("2 - Sair");
+                    opcao = scanner.nextInt();
+                    if(opcao == 1) {
+                        return 3;
+                    } else if(opcao == 2) {
+                        break;
+                    }
+                    return opcao;
 
                 case 4:
+
                     break;
 
                 case 5:
@@ -71,9 +82,15 @@ public class papelMenu {
                     System.out.println("Opcao invalida!");
                     break;
             }
-        } while(opcao !=5);
+        } while(opcao != 5);
 
         return opcao;
+    }
+
+    public static String consultarConstrutorCpf() {
+        System.out.println("Digite o CPF do Construtor: ");
+        scanner.nextLine();
+        return scanner.nextLine();
     }
 
 }
