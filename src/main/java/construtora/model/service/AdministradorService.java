@@ -17,24 +17,11 @@ public class AdministradorService {
      * @param valor Valor do pagamento.
      */
     public void registrarRecebimento(Administrador administrador, Cliente cliente, float valor) {
-        
-        //Primeiro isntanciamos e depois criamos a nova tranferencia
-        TransferenciaDAO transferenciaDAO = new TransferenciaDAO();
-
-        Transferencia transferencia = new Transferencia(0, valor, LocalDate.now(), administrador);
-        
-        int transferenciaId = transferenciaDAO.create(transferencia);
-        
-        //caso haja algum erro no bd: 
-        if (transferenciaId == -1) {
-            System.out.println("Erro ao registrar a transferência.");
-            return;
-        }
 
         //Agora instanciamos e criamos um novo pagamento
         RecebimentoDAO recebimentoDAO = new RecebimentoDAO();
 
-        Recebimento recebimento = new Recebimento(cliente, transferenciaId, valor, LocalDate.now(), administrador);
+        Recebimento recebimento = new Recebimento(cliente, 0, valor, LocalDate.now(), administrador);
 
         recebimentoDAO.create(recebimento);
 
