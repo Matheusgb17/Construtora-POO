@@ -270,5 +270,5 @@ public class ClienteDAO {
     // Getters e setters
     public String getTableName() {
         return tableName;
-    }
+   }
 }

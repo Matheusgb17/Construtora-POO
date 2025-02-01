@@ -1,5 +1,6 @@
 package construtora.view;
 
+<<<<<<< HEAD
 import java.util.*;
 
 import com.mysql.cj.log.Log;
@@ -18,6 +19,11 @@ public class Main {
     
     public static void main(String[] args) {
         login();
+=======
+public class Main {
+    
+    public static void main(String[] args) {
+>>>>>>> 365010fab17a10ff0f23f6616cebbd927cb7949e
 
     }
 }

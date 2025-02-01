@@ -1,13 +1,12 @@
 package construtora.model.service;
-
 import construtora.model.dao.ClienteDAO;
 import construtora.model.dao.ConstrutorDAO;
 import construtora.model.dao.FuncionarioDAO;
 import construtora.model.dao.EngenheiroDAO;
-import construtora.model.dao.UsuarioDAO;
+import construtora.model.dao.RecebimentoDAO;
 import construtora.model.entity.*;
+import java.time.LocalDate;
 import java.util.Scanner;
-import static utils.PasswordUtils.criptografarSenha;
 
 
 public class AdministradorService {
@@ -16,8 +15,6 @@ public class AdministradorService {
     ConstrutorDAO construtorDAO = new ConstrutorDAO();
     FuncionarioDAO funcionarioDAO = new FuncionarioDAO();
     EngenheiroDAO engenheiroDAO = new EngenheiroDAO();
-
-
 
     public void cadastrarCliente (Cliente cliente) {
         //Informando os dados do cliente
@@ -153,7 +150,17 @@ public class AdministradorService {
         if (retornoId > 0) {
             engenheiro.setId(retornoId);
         }
-
     }
+    
+    public void registrarRecebimento(Administrador administrador, Cliente cliente, float valor) {
 
+        //Agora instanciamos e criamos um novo pagamento
+        RecebimentoDAO recebimentoDAO = new RecebimentoDAO();
+
+        Recebimento recebimento = new Recebimento(cliente, 0, valor, LocalDate.now(), administrador);
+
+        recebimentoDAO.create(recebimento);
+
+        System.out.println("Recebimento de R$ " + valor + " registrado com sucesso do cliente: " + cliente.getNome());
+    }
 }
