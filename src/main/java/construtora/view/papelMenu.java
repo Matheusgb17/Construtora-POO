@@ -48,6 +48,9 @@ public class papelMenu {
                     System.out.println("\n1 - Adicionar cliente ");
                     System.out.println("2 - Sair");
                     opcao = scanner.nextInt();
+                    if (opcao == 2) {
+                        break;
+                    }
                     return opcao;
                 case 2:
                     System.out.println("\n1 - Adicionar construtor ");
