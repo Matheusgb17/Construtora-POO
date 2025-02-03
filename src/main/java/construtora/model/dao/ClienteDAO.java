@@ -6,6 +6,7 @@ import construtora.model.entity.Usuario;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.sql.ResultSet;
 
 public class ClienteDAO {
     /**
@@ -27,8 +28,9 @@ public class ClienteDAO {
     /**
      * Adicionar um cliente ao banco de dados
      * @param cliente TAD do cliente a ser inserido
+     * @return 
      */
-    public  int create(Cliente cliente) {
+    public int create(Cliente cliente) {
         /* Inserindo os dados base na tabela de usuários.
          * Isso é possível pois Cliente herda de Usuario. */
         int codigoGerado = -1;

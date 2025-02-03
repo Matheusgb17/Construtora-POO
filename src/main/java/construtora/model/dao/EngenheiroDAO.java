@@ -29,6 +29,7 @@ public class EngenheiroDAO {
     /**
      * Adicionar um engenheiro ao banco de dados
      * @param engenheiro TAD do engenheiro a ser inserido
+     * @return 
      */
     public int create(Engenheiro engenheiro) {
         int codigoGerado = -1;
