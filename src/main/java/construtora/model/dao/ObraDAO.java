@@ -1,7 +1,6 @@
 package construtora.model.dao;
 
 import construtora.model.entity.Obra;
-import construtora.model.entity.Usuario;
 import construtora.model.entity.Cliente;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -236,4 +235,7 @@ public class ObraDAO {
     public List<Obra> findUnderReview () {
         return findByStatus(this.underReview);
     }
+
+    
+
 }

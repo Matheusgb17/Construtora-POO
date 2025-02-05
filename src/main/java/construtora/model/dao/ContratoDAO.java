@@ -4,6 +4,7 @@ package construtora.model.dao;
 import construtora.model.entity.Contrato;
 import construtora.model.entity.Engenheiro;
 import construtora.model.entity.Construtor;
+import construtora.model.entity.Funcionario;
 import construtora.model.entity.Obra;
 
 /* Imports do Java */
@@ -21,6 +22,7 @@ public class ContratoDAO {
 
     private final EngenheiroDAO engenheiroDAO = new EngenheiroDAO();
     private final ConstrutorDAO construtorDAO = new ConstrutorDAO();
+    private final FuncionarioDAO funcionarioDAO = new FuncionarioDAO();
     private final ObraDAO obraDAO = new ObraDAO();
 
     private final Connection conexao;
@@ -224,6 +226,139 @@ public class ContratoDAO {
         todosContratos.addAll(getContratosFinalizados(engenheiro));
         todosContratos.addAll(getContratosEmAndamento(engenheiro));
         todosContratos.addAll(getContratosFuturos(engenheiro));
+        return todosContratos;
+    }
+    
+    /**
+     * Retorna uma lista de contratos finalizados de um construtor.
+     *
+     * @param construtor O construtor cujos contratos finalizados serão
+     * retornados.
+     * @return Lista de contratos finalizados.
+     */
+    public List<Contrato> getContratosFinalizados(Construtor construtor) {
+        List<Contrato> contratosFinalizados = new ArrayList<>();
+        String sql = "SELECT * FROM " + this.tableName + " WHERE construtor_id = ? AND data_fim <= ?;";
+
+        try (PreparedStatement stmt = conexao.prepareStatement(sql)) {
+            stmt.setInt(1, construtor.getId());
+            stmt.setDate(2, Date.valueOf(LocalDate.now()));
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Contrato contrato = buildContratoFromResultSet(rs);
+                    contratosFinalizados.add(contrato);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return contratosFinalizados;
+    }
+
+    /**
+     * Retorna uma lista de contratos em andamento de um construtor.
+     *
+     * @param construtor O construtor cujos contratos em andamento serão
+     * retornados.
+     * @return Lista de contratos em andamento.
+     */
+    public List<Contrato> getContratosEmAndamento(Construtor construtor) {
+        List<Contrato> contratosEmAndamento = new ArrayList<>();
+        String sql = "SELECT * FROM " + this.tableName + " WHERE construtor_id = ? AND data_inicio <= ? AND data_fim > ?;";
+
+        try (PreparedStatement stmt = conexao.prepareStatement(sql)) {
+            stmt.setInt(1, construtor.getId());
+            stmt.setDate(2, Date.valueOf(LocalDate.now()));
+            stmt.setDate(3, Date.valueOf(LocalDate.now()));
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Contrato contrato = buildContratoFromResultSet(rs);
+                    contratosEmAndamento.add(contrato);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return contratosEmAndamento;
+    }
+
+    /**
+     * Retorna uma lista de contratos futuros de um construtor.
+     *
+     * @param construtor O construtor cujos contratos futuros serão retornados.
+     * @return Lista de contratos futuros.
+     */
+    public List<Contrato> getContratosFuturos(Construtor construtor) {
+        List<Contrato> contratosFuturos = new ArrayList<>();
+        String sql = "SELECT * FROM " + this.tableName + " WHERE construtor_id = ? AND data_inicio > ?;";
+
+        try (PreparedStatement stmt = conexao.prepareStatement(sql)) {
+            stmt.setInt(1, construtor.getId());
+            stmt.setDate(2, Date.valueOf(LocalDate.now()));
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Contrato contrato = buildContratoFromResultSet(rs);
+                    contratosFuturos.add(contrato);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return contratosFuturos;
+    }
+
+    /**
+     * Lista todos os contratos de determinado construtor.
+     *
+     * @param construtor O construtor cujos contratos serão retornados.
+     * @return Lista de todos os contratos.
+     */
+    public List<Contrato> getTodosContratosPorConstrutor(Construtor construtor) {
+        List<Contrato> todosContratos = new ArrayList<>();
+        todosContratos.addAll(getContratosFinalizados(construtor));
+        todosContratos.addAll(getContratosEmAndamento(construtor));
+        todosContratos.addAll(getContratosFuturos(construtor));
+        return todosContratos;
+    }
+    
+    public List<Contrato> getContratosFinalizados (Funcionario funcionario) {
+        List<Contrato> contratos = new ArrayList<>();
+        
+        Construtor construtor = construtorDAO.find(funcionario.getConstrutor().getCpf());
+        
+        contratos = getContratosFinalizados(construtor);
+        
+        return contratos;
+    }
+    
+    public List<Contrato> getContratosEmAndamento (Funcionario funcionario) {
+        List<Contrato> contratos = new ArrayList<>();
+        
+        Construtor construtor = construtorDAO.find(funcionario.getConstrutor().getCpf());
+        
+        contratos = getContratosEmAndamento(construtor);
+        
+        return contratos;
+    }
+    
+    public List<Contrato> getContratosFuturos (Funcionario funcionario) {
+        List<Contrato> contratos = new ArrayList<>();
+        
+        Construtor construtor = construtorDAO.find(funcionario.getConstrutor().getCpf());
+        
+        contratos = getContratosFuturos(construtor);
+        
+        return contratos;
+    }
+    
+    public List<Contrato> getTodosContratosPorFuncionario (Funcionario funcionario) {
+        List<Contrato> todosContratos = new ArrayList<>();
+        todosContratos.addAll(getContratosFinalizados(funcionario));
+        todosContratos.addAll(getContratosEmAndamento(funcionario));
+        todosContratos.addAll(getContratosFuturos(funcionario));
         return todosContratos;
     }
 

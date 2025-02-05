@@ -1,13 +1,14 @@
 package construtora.model.service;
 
+import construtora.model.dao.EngenheiroDAO;
 import construtora.model.entity.Contrato;
 import java.util.List;
 import java.util.ArrayList;
 
+
 public class EngenheiroService {
 
-    public EngenheiroService() {
-    
+    public EngenheiroService() { 
     }
     
     /**

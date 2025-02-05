@@ -29,14 +29,16 @@ public class EngenheiroDAO {
     /**
      * Adicionar um engenheiro ao banco de dados
      * @param engenheiro TAD do engenheiro a ser inserido
+     * @return 
      */
-    public void create(Engenheiro engenheiro) {
+    public int create(Engenheiro engenheiro) {
+        int codigoGerado = -1;
         // Inserindo os dados base na tabela de usuários.
         int usuarioId = this.usuarioDAO.create(engenheiro);
         
         if (usuarioId == -1) {
             System.out.println("=== ERRO AO INSERIR NA TABELA DE USUÁRIOS ===");
-            return;
+            return codigoGerado;
         }
         
         String sql = "INSERT INTO " + this.tableName + " (usuario_id, crea) VALUES (?, ?);";
@@ -47,9 +49,16 @@ public class EngenheiroDAO {
             stmt.executeUpdate();
             
             System.out.println("Engenheiro inserido com sucesso!");
+            
+            ResultSet rs = stmt.getGeneratedKeys();
+            if (rs.next()) {
+                codigoGerado = rs.getInt(1);
+            }
+            rs.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return codigoGerado;
     }
     
     /**
