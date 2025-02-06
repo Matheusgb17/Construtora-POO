@@ -6,6 +6,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,7 +44,7 @@ public class EngenheiroDAO {
         
         String sql = "INSERT INTO " + this.tableName + " (usuario_id, crea) VALUES (?, ?);";
         
-        try (PreparedStatement stmt = conexao.prepareStatement(sql)) {
+        try (PreparedStatement stmt = conexao.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setInt(1, usuarioId);
             stmt.setString(2, engenheiro.getCrea());
             stmt.executeUpdate();

@@ -13,6 +13,10 @@ import utils.*;
 public class Main {
     
     public static void main(String[] args) {
+        /* Adiciona dados padrão ao banco de dados. */
+        Seeder seeder = new Seeder();
+        seeder.run();
         
+        Login.login();
     }
 }
