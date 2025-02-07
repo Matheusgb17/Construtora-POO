@@ -101,7 +101,7 @@ public class UsuarioDAO {
                         rs.getString("nome"), 
                         rs.getString("cpf"), 
                         rs.getString("telefone"), 
-                        rs.getString("senha"), 
+                        rs.getString("senha").trim(), 
                         rs.getString("papel")
                 );
                 return usuario;

@@ -10,6 +10,9 @@ public class Engenheiro extends Usuario {
         this.setCrea(crea);
     }
     
+    public Engenheiro () {
+        
+    }
     
     // Getters e setters
     public String getCrea() {

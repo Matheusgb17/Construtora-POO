@@ -34,7 +34,7 @@ public class UsuarioController {
                 break;
             }
             switch (usuario.getPapel()) {
-                case ("administrador"), "construtor":
+                case "administrador", "construtor":
                     opcao = papelMenu.opcaoCadastroAdmin(usuario);
                     if (opcao == 1) {
                         adminService.cadastrarCliente(cliente);
@@ -71,5 +71,4 @@ public class UsuarioController {
         } while (true);
 
     }
-
 }

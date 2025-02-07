@@ -237,7 +237,7 @@ public class Seeder {
                     0, 
                     "Default", 
                     "99999999999", 
-                    "0000000000", 
+                    "00000000000", 
                     "123456789", 
                     ad.getTableName()
             );

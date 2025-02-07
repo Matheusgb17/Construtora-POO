@@ -10,6 +10,10 @@ public class Administrador extends Usuario {
         this.setCargo(cargo);
     }
     
+    public Administrador () {
+        
+    }
+    
 
     // Getters e setters
     public String getCargo() {
