@@ -10,6 +10,8 @@ import utils.*;
 
 
 public class Main {
+    
+    
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         
@@ -62,32 +64,48 @@ public class Main {
         while (opcao != 2 && opcao != 0);
         
         /* Agora, separamos as funcionalidades de acordo com o papel do usuário. */
-        switch (usuarioLogado.getPapel()) {
-            case "administrador":
-                MenuUtils.administradorMainMenu();
-                System.out.print("Digite: ");
-                opcao = scanner.nextInt();
-            break;
-            case "cliente":
-                MenuUtils.clienteMainMenu();
-                System.out.print("Digite: ");
-                opcao = scanner.nextInt();
-            break;
-            case "construtor":
-                MenuUtils.construtorMainMenu();
-                System.out.print("Digite: ");
-                opcao = scanner.nextInt();
-            break;
-            case "engenheiro":
-                MenuUtils.engenheiroMainMenu();
-                System.out.print("Digite: ");
-                opcao = scanner.nextInt();
-            break;
-            case "funcionario":
-                MenuUtils.funcionarioMainMenu();
-                System.out.print("Digite: ");
-                opcao = scanner.nextInt();
-            break;
+        do {
+            switch (usuarioLogado.getPapel()) {
+                case "administrador":
+                    
+                    MenuUtils.administradorMainMenu();
+                    selecionarOpcao(0, 9, scanner);
+                break;
+                case "cliente":
+                    MenuUtils.clienteMainMenu();
+                    selecionarOpcao(0, 3, scanner);
+                break;
+                case "construtor":
+                    MenuUtils.construtorMainMenu();
+                    selecionarOpcao(0, 1, scanner);
+                break;
+                case "engenheiro":
+                    engenheiroLogado = lc.recuperarEngenheiroLogado(usuarioLogado);
+                    MenuUtils.engenheiroMainMenu();
+                    selecionarOpcao(0, 1, scanner);
+                    ec.executarAcaoEngenheiro(opcao, engenheiroLogado);
+                break;
+                case "funcionario":
+                    MenuUtils.funcionarioMainMenu();
+                    selecionarOpcao(0, 1, scanner);
+                break;
+            }
+        } while (opcao != 0);
+    }
+    
+    public static int selecionarOpcao (int primeiraOpcao, int ultimaOpcao, Scanner scanner) {
+        int opcao;
+        
+        do {
+            System.out.print("Digite: ");
+            opcao = scanner.nextInt();
+            
+            if (opcao < primeiraOpcao || opcao > ultimaOpcao) {
+                System.out.println("===== OPÇÃO INVÁLIDA =====");
+            }
         }
+        while(opcao < primeiraOpcao || opcao > ultimaOpcao);
+        
+        return opcao;
     }
 }

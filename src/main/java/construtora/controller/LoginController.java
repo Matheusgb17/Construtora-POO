@@ -7,6 +7,7 @@ import java.util.Scanner;
 
 public class LoginController {
     private UsuarioService us = new UsuarioService();
+    private EngenheiroService es = new EngenheiroService();
     private Scanner scanner = new Scanner(System.in);
     
     public Usuario login() {
@@ -36,5 +37,10 @@ public class LoginController {
         String senhaCriptografada = PasswordUtils.criptografarSenha(senha);
         
         return senhaCriptografada.equals(usuario.getSenha());
+    }
+    
+    public Engenheiro recuperarEngenheiroLogado (Usuario usuarioLogado) {
+        Engenheiro engenheiroLogado = es.recuperarEngenheiro(usuarioLogado.getCpf());
+        return engenheiroLogado;
     }
 }
