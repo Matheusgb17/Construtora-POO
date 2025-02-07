@@ -49,6 +49,8 @@ public class Main {
             switch (opcao) {
                 case 1:
                     usuarioLogado = lc.login();
+                    
+                    opcao = usuarioLogado != null ? 0 : 1;
                 break;
                 
                 case 2:
@@ -57,24 +59,34 @@ public class Main {
                 break;
             }
         }
-        while (opcao != 2 || usuarioLogado != null);
+        while (opcao != 2 && opcao != 0);
         
         /* Agora, separamos as funcionalidades de acordo com o papel do usuário. */
         switch (usuarioLogado.getPapel()) {
             case "administrador":
                 MenuUtils.administradorMainMenu();
+                System.out.print("Digite: ");
+                opcao = scanner.nextInt();
             break;
             case "cliente":
                 MenuUtils.clienteMainMenu();
+                System.out.print("Digite: ");
+                opcao = scanner.nextInt();
             break;
             case "construtor":
                 MenuUtils.construtorMainMenu();
+                System.out.print("Digite: ");
+                opcao = scanner.nextInt();
             break;
             case "engenheiro":
                 MenuUtils.engenheiroMainMenu();
+                System.out.print("Digite: ");
+                opcao = scanner.nextInt();
             break;
             case "funcionario":
                 MenuUtils.funcionarioMainMenu();
+                System.out.print("Digite: ");
+                opcao = scanner.nextInt();
             break;
         }
     }

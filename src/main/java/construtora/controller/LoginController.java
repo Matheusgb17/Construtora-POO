@@ -20,7 +20,7 @@ public class LoginController {
         
         if (autenticar(cpf, senha)) {
             Usuario u = us.buscarUsuario(cpf);
-            System.out.println(u.toString());
+            return u;
         }
         
         return null;
@@ -32,17 +32,9 @@ public class LoginController {
         if (usuario == null) {
             return false;
         }
-        
-        System.out.println(usuario.getSenha());
 
-        //String senhaCriptografada = PasswordUtils.criptografarSenha(senha);
+        String senhaCriptografada = PasswordUtils.criptografarSenha(senha);
         
-        String senhaCriptografada = PasswordUtils.criptografarSenha("15E2B0D3C33891EBB0F1EF609EC419420C20E320CE94C65FBC8C3312448EB225");
-        
-        System.out.println(senhaCriptografada);
-        
-        //System.out.println(senhaCriptografada.equals(usuario.getSenha()));
-        
-        return false;
+        return senhaCriptografada.equals(usuario.getSenha());
     }
 }

@@ -64,7 +64,7 @@ public class Usuario {
     }
 
     public void setSenha(String senha) {
-        this.senha = criptografarSenha(senha);
+        this.senha = senha;
     }
 
     public String getPapel() {
@@ -73,5 +73,10 @@ public class Usuario {
 
     public void setPapel(String papel) {
         this.papel = papel;
+    }
+
+    @Override
+    public String toString() {
+        return "Usuario{" + "id=" + id + ", nome=" + nome + ", cpf=" + cpf + ", telefone=" + telefone + ", senha=" + senha + ", papel=" + papel + '}';
     }
 }

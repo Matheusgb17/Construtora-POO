@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import utils.PasswordUtils;
 
 public class UsuarioDAO {
     private final String tableName = "usuario";
@@ -26,7 +27,7 @@ public class UsuarioDAO {
             stmt.setString(1, usuario.getNome());
             stmt.setString(2, usuario.getCpf());
             stmt.setString(3, usuario.getTelefone());
-            stmt.setString(4, usuario.getSenha());
+            stmt.setString(4, PasswordUtils.criptografarSenha(usuario.getSenha()));
             stmt.setString(5, usuario.getPapel());
 
             stmt.executeUpdate();
