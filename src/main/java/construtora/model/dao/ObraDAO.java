@@ -31,7 +31,7 @@ public class ObraDAO {
         try (PreparedStatement stmt = conexao.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setString(1, obra.getEndereco());
             stmt.setString(2, obra.getTipoObra());
-            stmt.setString(3, obra.getStatus());
+            stmt.setString(3, this.underReview);
             stmt.setInt(4, obra.getCliente().getId());
             stmt.executeUpdate();
 
@@ -244,6 +244,18 @@ public class ObraDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public String getNotApproved() {
+        return notApproved;
+    }
+
+    public String getApproved() {
+        return approved;
+    }
+
+    public String getUnderReview() {
+        return underReview;
     }
 
 }

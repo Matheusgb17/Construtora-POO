@@ -140,6 +140,65 @@ public class ContratoDAO {
         }
     }
     
+    public List<Contrato> getContratosFinalizados () {
+        List<Contrato> contratosFinalizados = new ArrayList<>();
+        String sql = "SELECT * FROM " + this.tableName + " WHERE dataFim <= ?;";
+
+        try (PreparedStatement stmt = conexao.prepareStatement(sql)) {
+            stmt.setDate(1, Date.valueOf(LocalDate.now()));
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Contrato contrato = buildContratoFromResultSet(rs);
+                    contratosFinalizados.add(contrato);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return contratosFinalizados;
+    }
+    
+    public List<Contrato> getContratosEmAndamento () {
+        List<Contrato> contratosFinalizados = new ArrayList<>();
+        String sql = "SELECT * FROM " + this.tableName + " WHERE dataInicio <= ? AND dataFim > ?;";
+
+        try (PreparedStatement stmt = conexao.prepareStatement(sql)) {
+            stmt.setDate(1, Date.valueOf(LocalDate.now()));
+            stmt.setDate(2, Date.valueOf(LocalDate.now()));
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Contrato contrato = buildContratoFromResultSet(rs);
+                    contratosFinalizados.add(contrato);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return contratosFinalizados;
+    }
+    
+    public List<Contrato> getContratosFuturos () {
+        List<Contrato> contratosFinalizados = new ArrayList<>();
+        String sql = "SELECT * FROM " + this.tableName + " WHERE dataInicio > ?;";
+
+        try (PreparedStatement stmt = conexao.prepareStatement(sql)) {
+            stmt.setDate(1, Date.valueOf(LocalDate.now()));
+            stmt.setDate(2, Date.valueOf(LocalDate.now()));
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Contrato contrato = buildContratoFromResultSet(rs);
+                    contratosFinalizados.add(contrato);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return contratosFinalizados;
+    }
+    
     /**
      * Retorna uma lista de contratos finalizados de um engenheiro.
      * @param engenheiro O engenheiro cujos contratos finalizados serão retornados.

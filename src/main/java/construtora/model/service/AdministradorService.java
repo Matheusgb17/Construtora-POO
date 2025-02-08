@@ -13,153 +13,255 @@ import java.util.Scanner;
 public class AdministradorService {
 
     Scanner scanner = new Scanner(System.in);
-    ClienteDAO clienteDAO = new ClienteDAO();
-    ConstrutorDAO construtorDAO = new ConstrutorDAO();
-    FuncionarioDAO funcionarioDAO = new FuncionarioDAO();
-    EngenheiroDAO engenheiroDAO = new EngenheiroDAO();
     
-    
-    RecebimentoDAO recebimentoDAO = new RecebimentoDAO();
-
     public void cadastrarCliente(Cliente cliente) {
-        //Informando os dados do cliente
+        ClienteDAO clienteDAO = new ClienteDAO();
+
+        // Solicita o nome do cliente
         System.out.println("Digite o nome do cliente: ");
         cliente.setNome(scanner.nextLine());
-        System.out.println("Digite o cpf do cliente: ");
-        cliente.setCpf(scanner.nextLine());
-        if (utils.CPFUtils.validarCPF(cliente.getCpf()) == false) {
-            System.out.println("Insira os dados novamente!\n");
-            cadastrarCliente(cliente);
-        }
-        System.out.println("Digite o telefone do cliente: ");
-        cliente.setTelefone(scanner.nextLine());
-        if (utils.TelefoneUtils.validarTelefone(cliente.getTelefone()) == false) {
-            System.out.println("Insira os dados novamente!\n");
-            cadastrarCliente(cliente);
-        }
-        /*A senha de primeiro acesso será os 4 ultimos dígitos do telefone do cliente, a ideia é que após o primeiro acesso
-        o usuário altere a senha.*/
-        String senha = cliente.getTelefone().substring(cliente.getTelefone().length() - 4);
 
-        //setando senha criptografada
+        // Captura e valida o CPF do cliente utilizando loop
+        String cpf;
+        do {
+            System.out.println("Digite o CPF do cliente: ");
+            cpf = scanner.nextLine();
+            if (!utils.CPFUtils.validarCPF(cpf)) {
+                System.out.println("CPF inválido. Insira os dados novamente!");
+            }
+        } while (!utils.CPFUtils.validarCPF(cpf));
+        cliente.setCpf(cpf);
+
+        // Captura e valida o telefone do cliente utilizando loop
+        String telefone;
+        do {
+            System.out.println("Digite o telefone do cliente: ");
+            telefone = scanner.nextLine();
+            if (!utils.TelefoneUtils.validarTelefone(telefone)) {
+                System.out.println("Telefone inválido. Insira os dados novamente!");
+            }
+        } while (!utils.TelefoneUtils.validarTelefone(telefone));
+        cliente.setTelefone(telefone);
+
+        // Solicita a senha ao usuário
+        System.out.println("Digite a senha de acesso: ");
+        String senha = scanner.nextLine();
         cliente.setSenha(senha);
 
+        // Define o status inicial do cliente
         cliente.setStatus("ativo");
 
+        // Cria o cliente no banco de dados
         int retornoId = clienteDAO.create(cliente);
         if (retornoId > 0) {
             cliente.setId(retornoId);
+            System.out.println("Cliente cadastrado com sucesso!");
+        } else {
+            System.out.println("Falha ao cadastrar cliente.");
         }
 
+        // Fecha os recursos do DAO
+        clienteDAO.close();
     }
 
     public void cadastrarFuncionario(Funcionario funcionario, Construtor construtor) {
+        FuncionarioDAO funcionarioDAO = new FuncionarioDAO();
         funcionario.setConstrutor(construtor);
 
-        //Informando os dados do funcionario
+        // Captura e valida o nome
         System.out.println("Digite o nome do funcionario: ");
         funcionario.setNome(scanner.nextLine());
-        System.out.println("Digite o cpf do funcionario: ");
-        funcionario.setCpf(scanner.nextLine());
-        if (utils.CPFUtils.validarCPF(funcionario.getCpf()) == false) {
-            System.out.println("Insira os dados novamente!\n");
-            cadastrarFuncionario(funcionario, construtor);
-        }
-        System.out.println("Digite o telefone do funcionario: ");
-        funcionario.setTelefone(scanner.nextLine());
-        if (utils.TelefoneUtils.validarTelefone(funcionario.getCpf()) == false) {
-            System.out.println("Insira os dados novamente!\n");
-            cadastrarFuncionario(funcionario, construtor);
-        }
+
+        // Loop para validação do CPF
+        String cpf;
+        do {
+            System.out.println("Digite o CPF do funcionario: ");
+            cpf = scanner.nextLine();
+            if (!utils.CPFUtils.validarCPF(cpf)) {
+                System.out.println("CPF inválido. Insira os dados novamente!");
+            }
+        } while (!utils.CPFUtils.validarCPF(cpf));
+        funcionario.setCpf(cpf);
+
+        // Loop para validação do telefone
+        String telefone;
+        do {
+            System.out.println("Digite o telefone do funcionario: ");
+            telefone = scanner.nextLine();
+            if (!utils.TelefoneUtils.validarTelefone(telefone)) {
+                System.out.println("Telefone inválido. Insira os dados novamente!");
+            }
+        } while (!utils.TelefoneUtils.validarTelefone(telefone));
+        funcionario.setTelefone(telefone);
+
         System.out.println("Digite o cargo do funcionario: ");
         funcionario.setCargo(scanner.nextLine());
-        /*A senha de primeiro acesso será os 4 ultimos dígitos do telefone do funcionario, a ideia é que após o primeiro acesso
-        o usuário altere a senha.*/
-        String senha = funcionario.getTelefone().substring(funcionario.getTelefone().length() - 4);
 
-        //setando senha criptografada
+        // Solicita a senha ao usuário
+        System.out.println("Digite a senha de acesso: ");
+        String senha = scanner.nextLine();
         funcionario.setSenha(senha);
 
         int retornoId = funcionarioDAO.create(funcionario);
         if (retornoId > 0) {
             funcionario.setId(retornoId);
+            System.out.println("Funcionário cadastrado com sucesso!");
+        } else {
+            System.out.println("Falha ao cadastrar funcionário.");
         }
+
+        funcionarioDAO.close();
     }
 
     public void cadastrarConstrutor(Construtor construtor) {
+        ConstrutorDAO construtorDAO = new ConstrutorDAO();
 
-        //Informando os dados do cliente
+        // Se houver algum newline pendente no scanner, consome-o.
         scanner.nextLine();
+
+        // Captura do nome do construtor
         System.out.println("Digite o nome do construtor: ");
         construtor.setNome(scanner.nextLine());
-        System.out.println("Digite o cpf do construtor: ");
-        construtor.setCpf(scanner.nextLine());
-        if (utils.CPFUtils.validarCPF(construtor.getCpf()) == false) {
-            System.out.println("Insira os dados novamente!\n");
-            cadastrarConstrutor(construtor);
-        }
-        System.out.println("Digite o telefone do construtor: ");
-        construtor.setTelefone(scanner.nextLine());
-        if (utils.TelefoneUtils.validarTelefone(construtor.getCpf()) == false) {
-            System.out.println("Insira os dados novamente!\n");
-            cadastrarConstrutor(construtor);
-        }
+
+        // Captura e validação do CPF
+        String cpf;
+        do {
+            System.out.println("Digite o CPF do construtor: ");
+            cpf = scanner.nextLine();
+            if (!utils.CPFUtils.validarCPF(cpf)) {
+                System.out.println("CPF inválido. Insira os dados novamente!");
+            }
+        } while (!utils.CPFUtils.validarCPF(cpf));
+        construtor.setCpf(cpf);
+
+        // Captura e validação do telefone
+        String telefone;
+        do {
+            System.out.println("Digite o telefone do construtor: ");
+            telefone = scanner.nextLine();
+            if (!utils.TelefoneUtils.validarTelefone(telefone)) {
+                System.out.println("Telefone inválido. Insira os dados novamente!");
+            }
+        } while (!utils.TelefoneUtils.validarTelefone(telefone));
+        construtor.setTelefone(telefone);
+
+        // Captura do tipo de serviço
         System.out.println("Digite o tipo de serviço do construtor: ");
         construtor.setTipoServico(scanner.nextLine());
-        /*A senha de primeiro acesso será os 4 ultimos dígitos do telefone do cliente, a ideia é que após o primeiro acesso
-        o usuário altere a senha.*/
-        String senha = construtor.getTelefone().substring(construtor.getTelefone().length() - 4);
 
-        //setando senha criptografada
+        // Solicita a senha ao usuário
+        System.out.println("Digite a senha de acesso: ");
+        String senha = scanner.nextLine();
         construtor.setSenha(senha);
 
+        // Cria o construtor no banco de dados
         int retornoId = construtorDAO.create(construtor);
         if (retornoId > 0) {
             construtor.setId(retornoId);
+            System.out.println("Construtor cadastrado com sucesso!");
+        } else {
+            System.out.println("Falha ao cadastrar construtor.");
         }
 
+        // Fecha os recursos do DAO (por exemplo, a conexão com o banco)
+        construtorDAO.close();
     }
 
     public void cadastrarEngenheiro(Engenheiro engenheiro) {
-        //Informando os dados 
+        EngenheiroDAO engenheiroDAO = new EngenheiroDAO();
+
+        // Se houver algum newline pendente, consome-o.
         scanner.nextLine();
+
+        // Captura do nome do engenheiro
         System.out.println("Digite o nome do engenheiro: ");
         engenheiro.setNome(scanner.nextLine());
-        System.out.println("Digite o cpf do engenheiro: ");
-        engenheiro.setCpf(scanner.nextLine());
-        if (utils.CPFUtils.validarCPF(engenheiro.getCpf()) == false) {
-            System.out.println("Insira os dados novamente!\n");
-            cadastrarEngenheiro(engenheiro);
-        }
-        System.out.println("Digite o telefone do engenheiro: ");
-        engenheiro.setTelefone(scanner.nextLine());
-        if (utils.TelefoneUtils.validarTelefone(engenheiro.getCpf()) == false) {
-            System.out.println("Insira os dados novamente!\n");
-            cadastrarEngenheiro(engenheiro);
-        }
+
+        // Captura e validação do CPF
+        String cpf;
+        do {
+            System.out.println("Digite o CPF do engenheiro: ");
+            cpf = scanner.nextLine();
+            if (!utils.CPFUtils.validarCPF(cpf)) {
+                System.out.println("CPF inválido. Insira os dados novamente!");
+            }
+        } while (!utils.CPFUtils.validarCPF(cpf));
+        engenheiro.setCpf(cpf);
+
+        // Captura e validação do telefone
+        String telefone;
+        do {
+            System.out.println("Digite o telefone do engenheiro: ");
+            telefone = scanner.nextLine();
+            if (!utils.TelefoneUtils.validarTelefone(telefone)) {
+                System.out.println("Telefone inválido. Insira os dados novamente!");
+            }
+        } while (!utils.TelefoneUtils.validarTelefone(telefone));
+        engenheiro.setTelefone(telefone);
+
+        // Captura do tipo de serviço
         System.out.println("Digite o tipo de serviço do engenheiro: ");
         engenheiro.setTipoServico(scanner.nextLine());
-        /*A senha de primeiro acesso será os 4 ultimos dígitos do telefone do cliente, a ideia é que após o primeiro acesso
-        o usuário altere a senha.*/
-        String senha = engenheiro.getTelefone().substring(engenheiro.getTelefone().length() - 4);
 
-        //setando senha criptografada
+        // Solicita a senha ao usuário
+        System.out.println("Digite a senha de acesso: ");
+        String senha = scanner.nextLine();
         engenheiro.setSenha(senha);
 
+        // Cria o engenheiro no banco de dados
         int retornoId = engenheiroDAO.create(engenheiro);
         if (retornoId > 0) {
             engenheiro.setId(retornoId);
+            System.out.println("Engenheiro cadastrado com sucesso!");
+        } else {
+            System.out.println("Falha ao cadastrar engenheiro.");
         }
+
+        // Fecha os recursos do DAO
+        engenheiroDAO.close();
     }
 
-    public void registrarRecebimento(Administrador administrador, Cliente cliente, float valor) {
+    public void gerarRecebimento(Administrador administrador, Cliente cliente, float valor, String descricao) {
+        // Validação de entrada
+        if (cliente == null) {
+            System.err.println("Erro: Cliente inválido. O pagamento não pode ser gerado.");
+            return;
+        }
+
+        if (valor <= 0) {
+            System.err.println("Erro: O valor do pagamento deve ser maior que zero.");
+            return;
+        }
+
+        // Define o nome do arquivo de pagamento
+        String nomeArquivo = "recibos/recebimentos/Recebimento_Cliente_" + cliente.getCpf() + "_" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy-HH-mm-ss")) + ".txt";
+
+        try (FileWriter writer = new FileWriter(nomeArquivo)) {
+            writer.write("===========================================\n");
+            writer.write("            RECIBO DE RECEBIMENTO           \n");
+            writer.write("===========================================\n\n");
+            writer.write("Data: " + LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) + "\n");
+            writer.write("CPF do Construtor: " + cliente.getCpf()+ "\n");
+            writer.write("Nome do Construtor: " + cliente.getNome() + "\n");
+            writer.write("Descrição: " + descricao + "\n");
+            writer.write("Valor: R$ " + String.format("%.2f", valor) + "\n\n");
+
+            writer.write("A construtora confirma o recebimento do cliente acima pelo serviço prestado.\n");
+            writer.write("\n-------------------------------------------\n");
+            writer.write("Assinatura do Cliente: ___________________\n\n");
+            writer.write("Assinatura da Construtora: ___________________\n");
+
+            System.out.println("Recebimento gerado com sucesso: " + nomeArquivo);
+        } catch (IOException e) {
+            System.err.println("Erro ao gerar o recebimento: " + e.getMessage());
+        }
+        
 
         //Agora instanciamos e criamos um novo pagamento
         RecebimentoDAO recebimentoDAO = new RecebimentoDAO();
-
         Recebimento recebimento = new Recebimento(cliente, 0, valor, LocalDate.now(), administrador);
-
         recebimentoDAO.create(recebimento);
+        recebimentoDAO.close();
 
         System.out.println("Recebimento de R$ " + valor + " registrado com sucesso do cliente: " + cliente.getNome());
     }
@@ -180,7 +282,7 @@ public class AdministradorService {
         Obra obra = obraDAO.find(idObra);
         if (obra == null) {
             System.out.println("Obra não encontrada com o ID informado.");
-            return;
+            obraDAO.close();
         }
 
         // Exibe os detalhes atuais da obra
@@ -189,46 +291,87 @@ public class AdministradorService {
         System.out.println("Endereço: " + obra.getEndereco());
         System.out.println("Tipo de obra: " + obra.getTipoObra());
         System.out.println("Status atual: " + obra.getStatus());
-        System.out.println("Cliente: " + obra.getCliente());
+        System.out.println("Cliente: " + obra.getCliente().getNome());
         System.out.println("Deseja aceitar esta obra? (s/n)");
         String resposta = scanner.nextLine();
 
         if (resposta.equalsIgnoreCase("s")) {
             // Atualiza o atributo "status" para "Aprovada"
-            obra.setStatus("Aprovada");
+            obra.setStatus(obraDAO.getApproved());
 
             // Persiste a alteração no banco de dados 
             obraDAO.update(obra);
             System.out.println("Obra aprovada com sucesso!");
+            
+            obra = obraDAO.find(idObra); // Pega os dados atualizados
+            this.gerarContratoDeObra(obra); // Gera o contrato da obra em si
         } else {
             System.out.println("Operação cancelada. A obra não foi aceita.");
-            obra.setStatus("Não aprovada");
+            obra.setStatus(obraDAO.getNotApproved());
             obraDAO.update(obra);
         }
+        
+        obraDAO.close();
     }
 
-    public static void gerarContrato(Obra obra) {
+    public void gerarContratoDeObra(Obra obra) {
         // Define o nome do arquivo de contrato
-        String nomeArquivo = "Contrato_Obra_" + obra.getId() + "_" + LocalDateTime.now() +".txt";
+        String nomeArquivo = "recibos/contratos/Contrato_Obra_" + obra.getId() + "_" + LocalDateTime.now() +".txt";
 
         try (FileWriter writer = new FileWriter(nomeArquivo)) {
             writer.write("===========================================\n");
-            writer.write("          CONTRATO DE PRESTAÇÃO DE SERVIÇO         \n");
+            writer.write("      CONTRATO DE PRESTAÇÃO DE OBRAS     \n");
             writer.write("===========================================\n\n");
             writer.write("Data: " + LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) + "\n");
             writer.write("ID da Obra: " + obra.getId() + "\n");
             writer.write("Endereço: " + obra.getEndereco() + "\n");
             writer.write("Tipo de Obra: " + obra.getTipoObra() + "\n");
             writer.write("Status: " + obra.getStatus() + "\n");
-            writer.write("Cliente: " + obra.getCliente().getId() + " - " + obra.getCliente().getNome() + "\n\n");
-            writer.write("Pelo presente instrumento, a empresa se compromete a realizar a obra nos termos estabelecidos...\n");
+            writer.write("Cliente: " + obra.getCliente().getCpf() + " - " + obra.getCliente().getNome() + "\n\n");
+            writer.write("Pelo presente instrumento, a empresa se compromete a realizar a obra nos termos estabelecidos.\n");
             writer.write("\n-------------------------------------------\n");
-            writer.write("Assinatura do Cliente: ___________________\n");
+            writer.write("Assinatura do Cliente: ___________________\n\n");
             writer.write("Assinatura da Empresa: ___________________\n");
 
             System.out.println("Contrato gerado com sucesso: " + nomeArquivo);
         } catch (IOException e) {
             System.err.println("Erro ao gerar o contrato: " + e.getMessage());
+        }
+    }
+    
+    public void cadastrarContratoDeServico (Contrato contrato) {
+        ContratoDAO contd = new ContratoDAO();
+        
+        contd.create(contrato);
+        
+        contd.close();
+        
+        this.gerarContratoDeServico(contrato);
+    }
+    
+    public void gerarContratoDeServico (Contrato contrato) {
+        // Define o nome do arquivo de pagamento
+        String nomeArquivo = "recibos/contratos/Contrato_Obra_" + contrato.getObra().getId() + "_Engenheiro_" + contrato.getEngenheiro().getCpf() + "_" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy-HH-mm-ss")) + ".txt";
+
+        try (FileWriter writer = new FileWriter(nomeArquivo)) {
+            writer.write("===========================================\n");
+            writer.write("      CONTRATO DE PRESTAÇÃO DE SERVIÇOS     \n");
+            writer.write("===========================================\n\n");
+            writer.write("Data: " + LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) + "\n");
+            writer.write("ID da Obra: " + contrato.getObra().getId() + "\n");
+            writer.write("Engenheiro: " + contrato.getEngenheiro().getNome() + "\n");
+            writer.write("Construtor: " + contrato.getConstrutor().getNome() + "\n");
+            writer.write("Valor: " + contrato.getValor() + "\n");
+            writer.write("Data de início: " + contrato.getDataInicio().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) + "\n");
+            writer.write("Data de fim: " + contrato.getDataFim().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) + "\n\n");
+            writer.write("Pelo presente instrumento, a empresa se compromete a realizar a obra nos termos estabelecidos.\n");
+            writer.write("\n-------------------------------------------\n");
+            writer.write("Assinatura do Cliente: ___________________\n\n");
+            writer.write("Assinatura da Empresa: ___________________\n");
+
+            System.out.println("Contrato gerado com sucesso: " + nomeArquivo);
+        } catch (IOException e) {
+            System.err.println("Erro ao gerar o pagamento: " + e.getMessage());
         }
     }
 
@@ -245,7 +388,7 @@ public class AdministradorService {
         }
 
         // Define o nome do arquivo de pagamento
-        String nomeArquivo = "pagamentos/Pagamento_Construtor_" + construtor.getCpf() + "_" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy-HH-mm-ss")) + ".txt";
+        String nomeArquivo = "recibos/pagamentos/Pagamento_Construtor_" + construtor.getCpf() + "_" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy-HH-mm-ss")) + ".txt";
 
         try (FileWriter writer = new FileWriter(nomeArquivo)) {
             writer.write("===========================================\n");

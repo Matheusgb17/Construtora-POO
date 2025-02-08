@@ -81,7 +81,7 @@ public class MenuUtils {
         System.out.println("2 - Editar engenheiro");
         System.out.println("3 - Deletar engenheiro");
         System.out.println("4 - Buscar engenheiro por CPF");
-        System.out.println("5 - Listar todos os engenheiro");
+        System.out.println("5 - Listar todos os engenheiros");
         System.out.println("6 - Voltar");
     }
     
@@ -90,20 +90,23 @@ public class MenuUtils {
         System.out.println("1 - Cadastrar obra");
         System.out.println("2 - Aprovar/Reprovar obra");
         System.out.println("3 - Buscar obra por ID");
-        System.out.println("4 - Voltar");
+        System.out.println("4 - Buscar obras por cliente");
+        System.out.println("5 - Listar obras não aprovadas");
+        System.out.println("6 - Listas obras aprovadas");
+        System.out.println("7 - Listar obras sob revisão");
+        System.out.println("8 - Voltar");
     }
     
-    /* public static void administradorSubMenu7 () {
+    public static void administradorSubMenu7 () {
         System.out.println("===== GERENCIAR CONTRATOS =====");
         System.out.println("1 - Cadastrar contrato");
-        System.out.println("2 - Editar contrato");
-        System.out.println("4 - Listar contratos finalizados");
-        System.out.println("5 - Listar contratos em andamento");
-        System.out.println("6 - Listar contratos futuros");
-        System.out.println("7 - Voltar");
+        System.out.println("2 - Listar contratos finalizados");
+        System.out.println("3 - Listar contratos em andamento");
+        System.out.println("4 - Listar contratos futuros");
+        System.out.println("5 - Voltar");
     }
     
-    public static void administradorSubMenu8 () {
+    /*public static void administradorSubMenu8 () {
         System.out.println("===== GERENCIAR PAGAMENTOS =====");
         System.out.println("1 - Cadastrar pagamento");
         System.out.println("2 - Editar pagamento");
