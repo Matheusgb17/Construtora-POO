@@ -32,7 +32,7 @@ public class ContratoDAO {
     }
 
     public void create(Contrato contrato) {
-        String sql = "INSERT INTO " + this.tableName + " (data_inicio, data_fim, valor, engenheiro_id, construtor_id, obra_id) VALUES (?, ?, ?, ?, ?, ?);";
+        String sql = "INSERT INTO " + this.tableName + " (dataInicio, dataFim, valor, engenheiro_id, construtor_id, obra_id) VALUES (?, ?, ?, ?, ?, ?);";
 
         try (PreparedStatement stmt = conexao.prepareStatement(sql)) {
             stmt.setDate(1, Date.valueOf(contrato.getDataInicio()));
@@ -63,8 +63,8 @@ public class ContratoDAO {
 
                     return new Contrato(
                         rs.getInt("id"),
-                        rs.getDate("data_inicio").toLocalDate(),
-                        rs.getDate("data_fim").toLocalDate(),
+                        rs.getDate("dataInicio").toLocalDate(),
+                        rs.getDate("dataFim").toLocalDate(),
                         rs.getFloat("valor"),
                         engenheiro,
                         construtor,
@@ -90,8 +90,8 @@ public class ContratoDAO {
 
                 Contrato contrato = new Contrato(
                     rs.getInt("id"),
-                    rs.getDate("data_inicio").toLocalDate(),
-                    rs.getDate("data_fim").toLocalDate(),
+                    rs.getDate("dataInicio").toLocalDate(),
+                    rs.getDate("dataFim").toLocalDate(),
                     rs.getFloat("valor"),
                     engenheiro,
                     construtor,
@@ -108,7 +108,7 @@ public class ContratoDAO {
     }
 
     public void update(Contrato contrato) {
-        String sql = "UPDATE " + this.tableName + " SET data_inicio = ?, data_fim = ?, valor = ?, engenheiro_id = ?, construtor_id = ?, obra_id = ? WHERE id = ?;";
+        String sql = "UPDATE " + this.tableName + " SET dataInicio = ?, dataFim = ?, valor = ?, engenheiro_id = ?, construtor_id = ?, obra_id = ? WHERE id = ?;";
 
         try (PreparedStatement stmt = conexao.prepareStatement(sql)) {
             stmt.setDate(1, Date.valueOf(contrato.getDataInicio()));
@@ -147,7 +147,7 @@ public class ContratoDAO {
      */
     public List<Contrato> getContratosFinalizados(Engenheiro engenheiro) {
         List<Contrato> contratosFinalizados = new ArrayList<>();
-        String sql = "SELECT * FROM " + this.tableName + " WHERE engenheiro_id = ? AND data_fim <= ?;";
+        String sql = "SELECT * FROM " + this.tableName + " WHERE engenheiro_id = ? AND dataFim <= ?;";
 
         try (PreparedStatement stmt = conexao.prepareStatement(sql)) {
             stmt.setInt(1, engenheiro.getId());
@@ -172,7 +172,7 @@ public class ContratoDAO {
      */
     public List<Contrato> getContratosEmAndamento(Engenheiro engenheiro) {
         List<Contrato> contratosEmAndamento = new ArrayList<>();
-        String sql = "SELECT * FROM " + this.tableName + " WHERE engenheiro_id = ? AND data_inicio <= ? AND data_fim > ?;";
+        String sql = "SELECT * FROM " + this.tableName + " WHERE engenheiro_id = ? AND dataInicio <= ? AND dataFim > ?;";
 
         try (PreparedStatement stmt = conexao.prepareStatement(sql)) {
             stmt.setInt(1, engenheiro.getId());
@@ -198,7 +198,7 @@ public class ContratoDAO {
      */
     public List<Contrato> getContratosFuturos(Engenheiro engenheiro) {
         List<Contrato> contratosFuturos = new ArrayList<>();
-        String sql = "SELECT * FROM " + this.tableName + " WHERE engenheiro_id = ? AND data_inicio > ?;";
+        String sql = "SELECT * FROM " + this.tableName + " WHERE engenheiro_id = ? AND dataInicio > ?;";
 
         try (PreparedStatement stmt = conexao.prepareStatement(sql)) {
             stmt.setInt(1, engenheiro.getId());
@@ -238,7 +238,7 @@ public class ContratoDAO {
      */
     public List<Contrato> getContratosFinalizados(Construtor construtor) {
         List<Contrato> contratosFinalizados = new ArrayList<>();
-        String sql = "SELECT * FROM " + this.tableName + " WHERE construtor_id = ? AND data_fim <= ?;";
+        String sql = "SELECT * FROM " + this.tableName + " WHERE construtor_id = ? AND dataFim <= ?;";
 
         try (PreparedStatement stmt = conexao.prepareStatement(sql)) {
             stmt.setInt(1, construtor.getId());
@@ -265,7 +265,7 @@ public class ContratoDAO {
      */
     public List<Contrato> getContratosEmAndamento(Construtor construtor) {
         List<Contrato> contratosEmAndamento = new ArrayList<>();
-        String sql = "SELECT * FROM " + this.tableName + " WHERE construtor_id = ? AND data_inicio <= ? AND data_fim > ?;";
+        String sql = "SELECT * FROM " + this.tableName + " WHERE construtor_id = ? AND dataInicio <= ? AND dataFim > ?;";
 
         try (PreparedStatement stmt = conexao.prepareStatement(sql)) {
             stmt.setInt(1, construtor.getId());
@@ -292,7 +292,7 @@ public class ContratoDAO {
      */
     public List<Contrato> getContratosFuturos(Construtor construtor) {
         List<Contrato> contratosFuturos = new ArrayList<>();
-        String sql = "SELECT * FROM " + this.tableName + " WHERE construtor_id = ? AND data_inicio > ?;";
+        String sql = "SELECT * FROM " + this.tableName + " WHERE construtor_id = ? AND dataInicio > ?;";
 
         try (PreparedStatement stmt = conexao.prepareStatement(sql)) {
             stmt.setInt(1, construtor.getId());
@@ -375,8 +375,8 @@ public class ContratoDAO {
 
         return new Contrato(
             rs.getInt("id"),
-            rs.getDate("data_inicio").toLocalDate(),
-            rs.getDate("data_fim").toLocalDate(),
+            rs.getDate("dataInicio").toLocalDate(),
+            rs.getDate("dataFim").toLocalDate(),
             rs.getFloat("valor"),
             engenheiro,
             construtor,
@@ -386,5 +386,15 @@ public class ContratoDAO {
 
     public String getTableName() {
         return tableName;
+    }
+    
+    public void close() {
+        try {
+            if (conexao != null && !conexao.isClosed()) {
+                conexao.close();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

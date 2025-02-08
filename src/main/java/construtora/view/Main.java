@@ -41,71 +41,46 @@ public class Main {
         
         System.out.println("===== CONSTRUTORA =====");
         
-        /* Login. */
-        do {
-            System.out.println("1 - Login");
-            System.out.println("2 - Sair");
-            System.out.print("Digite: ");
-            opcao = scanner.nextInt();
-            
-            switch (opcao) {
-                case 1:
-                    usuarioLogado = lc.login();
-                    
-                    opcao = usuarioLogado != null ? 0 : 1;
-                break;
-                
-                case 2:
-                    System.out.println("Saindo!");
-                    System.exit(0);
-                break;
-            }
-        }
-        while (opcao != 2 && opcao != 0);
+        /* Processo de login. */
+        usuarioLogado = lc.opcoesLogin();
         
         /* Agora, separamos as funcionalidades de acordo com o papel do usuário. */
         do {
             switch (usuarioLogado.getPapel()) {
-                case "administrador":
-                    
+                case "administrador" -> {
+                    administradorLogado = lc.recuperarAdministradorLogado(usuarioLogado);
                     MenuUtils.administradorMainMenu();
-                    selecionarOpcao(0, 9, scanner);
-                break;
-                case "cliente":
+                    opcao = MenuUtils.selecionarOpcao(0, 9);
+                    ac.executarAcaoAdministrador(opcao, administradorLogado);
+                }
+                
+                case "cliente" -> {
                     MenuUtils.clienteMainMenu();
-                    selecionarOpcao(0, 3, scanner);
-                break;
-                case "construtor":
+                    opcao = MenuUtils.selecionarOpcao(0, 3);
+                }
+                
+                case "construtor" -> {
+                    construtorLogado = lc.recuperarConstrutorLogado(usuarioLogado);
                     MenuUtils.construtorMainMenu();
-                    selecionarOpcao(0, 1, scanner);
-                break;
-                case "engenheiro":
+                    opcao = MenuUtils.selecionarOpcao(0, 1);
+                    consc.executarAcaoConstrutor(opcao, construtorLogado);
+                }
+                
+                case "engenheiro" -> {
                     engenheiroLogado = lc.recuperarEngenheiroLogado(usuarioLogado);
                     MenuUtils.engenheiroMainMenu();
-                    selecionarOpcao(0, 1, scanner);
+                    opcao = MenuUtils.selecionarOpcao(0, 1);
                     ec.executarAcaoEngenheiro(opcao, engenheiroLogado);
-                break;
-                case "funcionario":
+                }
+                
+                case "funcionario" -> {
+                    funcionarioLogado = lc.recuperarFuncionarioLogado(usuarioLogado);
                     MenuUtils.funcionarioMainMenu();
-                    selecionarOpcao(0, 1, scanner);
-                break;
+                    opcao = MenuUtils.selecionarOpcao(0, 1);
+                }
             }
         } while (opcao != 0);
     }
     
-    public static int selecionarOpcao (int primeiraOpcao, int ultimaOpcao, Scanner scanner) {
-        int opcao;
-        
-        do {
-            System.out.print("Digite: ");
-            opcao = scanner.nextInt();
-            
-            if (opcao < primeiraOpcao || opcao > ultimaOpcao) {
-                System.out.println("===== OPÇÃO INVÁLIDA =====");
-            }
-        }
-        while(opcao < primeiraOpcao || opcao > ultimaOpcao);
-        
-        return opcao;
-    }
+    
 }

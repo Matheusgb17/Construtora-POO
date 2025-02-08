@@ -10,8 +10,8 @@ import java.util.ArrayList;
 
 public class EngenheiroService {
 
-    private EngenheiroDAO ed = new EngenheiroDAO();
-    private ContratoDAO cd = new ContratoDAO();
+    
+    
     
     public EngenheiroService() { 
     }
@@ -22,15 +22,19 @@ public class EngenheiroService {
      * @return Lista com todos os contratos do engenheiro
      */
     public List<Contrato> getContratosPorEngenheiro (Engenheiro engenheiro) {
+        ContratoDAO cd = new ContratoDAO();
         List<Contrato> contratos = new ArrayList<>();
         
         contratos = cd.getTodosContratosPorEngenheiro(engenheiro);
+        cd.close();
         
         return contratos;
     }
     
     public Engenheiro recuperarEngenheiro (String cpf) {
+        EngenheiroDAO ed = new EngenheiroDAO();
         Engenheiro eng = ed.find(cpf);
+        ed.close();
         
         return eng;
     }

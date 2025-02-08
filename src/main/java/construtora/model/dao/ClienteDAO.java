@@ -57,6 +57,8 @@ public class ClienteDAO {
                 codigoGerado = rs.getInt(1);
             }
             rs.close();
+            
+            
         }
         catch (SQLException e) {
             e.printStackTrace();
@@ -89,6 +91,8 @@ public class ClienteDAO {
                             rsCliente.getString("senha"),
                             rsCliente.getString("papel")
                     );
+                    
+                    
 
                     return cliente;
                 }
@@ -139,6 +143,9 @@ public class ClienteDAO {
                         rsUsuario.getString("senha"),
                         rsUsuario.getString("papel")
                 );
+                
+                
+                
                 return cliente;
             }
         } catch (SQLException e) {
@@ -185,6 +192,8 @@ public class ClienteDAO {
             stmtCliente.setString(1, cliente.getStatus());
             stmtCliente.setInt(2, cliente.getId());
             stmtCliente.executeUpdate();
+            
+            
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -218,6 +227,8 @@ public class ClienteDAO {
                 );
                 clientes.add(cliente);
             }
+            
+            
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -248,6 +259,9 @@ public class ClienteDAO {
             } else {
                 System.out.println("Cliente não encontrado com o ID fornecido.");
             }
+            
+            
+                    
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -272,5 +286,15 @@ public class ClienteDAO {
     // Getters e setters
     public String getTableName() {
         return tableName;
-   }
+    }
+    
+    public void close() {
+        try {
+            if (conexao != null && !conexao.isClosed()) {
+                conexao.close();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }

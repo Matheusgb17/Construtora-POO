@@ -53,6 +53,7 @@ public class AdministradorDAO {
             
             System.out.println("Administrador inserido com sucesso!");
             
+            conexao.close();
         }
         catch (SQLException e) {
             e.printStackTrace();
@@ -83,6 +84,8 @@ public class AdministradorDAO {
                         rsAdministrador.getString("senha"),
                         rsAdministrador.getString("papel")
                     );
+                    
+                    conexao.close();
 
                     return administrador;
                 }
@@ -133,6 +136,8 @@ public class AdministradorDAO {
                     rsUsuario.getString("senha"),
                     rsUsuario.getString("papel")
                 );
+                
+                conexao.close();
                 return administrador;
             }
         } catch (SQLException e) {
@@ -178,6 +183,8 @@ public class AdministradorDAO {
             stmtAdministrador.setString(1, administrador.getCargo());
             stmtAdministrador.setInt(2, administrador.getId());
             stmtAdministrador.executeUpdate();
+            
+            conexao.close();
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -209,6 +216,8 @@ public class AdministradorDAO {
                 );
                 administradores.add(administrador);
             }
+            
+            conexao.close();
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -238,6 +247,8 @@ public class AdministradorDAO {
             } else {
                 System.out.println("Administrador não encontrado com o ID fornecido.");
             }
+            
+            conexao.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -261,5 +272,15 @@ public class AdministradorDAO {
     // Getters e setters
     public String getTableName() {
         return tableName;
+    }
+    
+    public void close() {
+        try {
+            if (conexao != null && !conexao.isClosed()) {
+                conexao.close();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

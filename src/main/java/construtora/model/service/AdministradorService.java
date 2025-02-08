@@ -3,12 +3,10 @@ package construtora.model.service;
 import construtora.model.dao.*;
 import construtora.model.entity.*;
 
-import construtora.model.dao.ClienteDAO;
-import construtora.model.entity.Cliente;
-
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
@@ -19,6 +17,9 @@ public class AdministradorService {
     ConstrutorDAO construtorDAO = new ConstrutorDAO();
     FuncionarioDAO funcionarioDAO = new FuncionarioDAO();
     EngenheiroDAO engenheiroDAO = new EngenheiroDAO();
+    
+    
+    RecebimentoDAO recebimentoDAO = new RecebimentoDAO();
 
     public void cadastrarCliente(Cliente cliente) {
         //Informando os dados do cliente
@@ -208,7 +209,7 @@ public class AdministradorService {
 
     public static void gerarContrato(Obra obra) {
         // Define o nome do arquivo de contrato
-        String nomeArquivo = "Contrato_Obra_" + obra.getId() + ".txt";
+        String nomeArquivo = "Contrato_Obra_" + obra.getId() + "_" + LocalDateTime.now() +".txt";
 
         try (FileWriter writer = new FileWriter(nomeArquivo)) {
             writer.write("===========================================\n");
@@ -231,7 +232,7 @@ public class AdministradorService {
         }
     }
 
-    public static void gerarPagamento(Construtor construtor, double valor, String descricao) {
+    public void gerarPagamento(Administrador administrador, Construtor construtor, float valor, String descricao) {
         // Validação de entrada
         if (construtor == null) {
             System.err.println("Erro: Construtor inválido. O pagamento não pode ser gerado.");
@@ -244,14 +245,14 @@ public class AdministradorService {
         }
 
         // Define o nome do arquivo de pagamento
-        String nomeArquivo = "Pagamento_Construtor_" + construtor.getId() + ".txt";
+        String nomeArquivo = "pagamentos/Pagamento_Construtor_" + construtor.getCpf() + "_" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy-HH-mm-ss")) + ".txt";
 
         try (FileWriter writer = new FileWriter(nomeArquivo)) {
             writer.write("===========================================\n");
             writer.write("            RECIBO DE PAGAMENTO           \n");
             writer.write("===========================================\n\n");
             writer.write("Data: " + LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) + "\n");
-            writer.write("ID do Construtor: " + construtor.getId() + "\n");
+            writer.write("CPF do Construtor: " + construtor.getCpf()+ "\n");
             writer.write("Nome do Construtor: " + construtor.getNome() + "\n");
             writer.write("Descrição: " + descricao + "\n");
             writer.write("Valor: R$ " + String.format("%.2f", valor) + "\n\n");
@@ -265,6 +266,25 @@ public class AdministradorService {
         } catch (IOException e) {
             System.err.println("Erro ao gerar o pagamento: " + e.getMessage());
         }
+        
+        // Colocar pagamento no banco de dados.
+        PagamentoDAO pagamentoDAO = new PagamentoDAO();
+        Pagamento pagamento = new Pagamento(construtor, 0, valor, LocalDate.now(), administrador);
+        pagamentoDAO.create(pagamento);
+        pagamentoDAO.close();
+    }
+    
+    public Administrador recuperarAdministrador (String cpf) {
+        AdministradorDAO administradorDAO = new AdministradorDAO();
+        Administrador adm = administradorDAO.find(cpf);
+        administradorDAO.close();
+        return adm;
+    }
+    
+    public void atualizarAdministrador (Administrador administrador) {
+        AdministradorDAO administradorDAO = new AdministradorDAO();
+        administradorDAO.update(administrador);
+        administradorDAO.close();
     }
 
 }

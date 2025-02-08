@@ -11,24 +11,24 @@ public class EngenheiroController {
     
     public void executarAcaoEngenheiro (int opcao, Engenheiro engenheiro) {
         switch (opcao) {
-            case 1:
+            case 1 -> {
                 this.contratos = es.getContratosPorEngenheiro(engenheiro);
                 
                 for (Contrato c : contratos) {
                     System.out.println("=== CONTRATO #" + c.getId() + " ===");
                     System.out.println("Valor: R$ " + c.getValor());
-                    System.out.println("Engenheiro responsável: " + c.getEngenheiro().getNome());
-                    System.out.println("Construtor responsável: " + c.getConstrutor().getNome());
+                    System.out.println("Engenheiro responsável: " + c.getEngenheiro().getNome() + " | CPF: " + c.getEngenheiro().getCpf());
+                    System.out.println("Construtor responsável: " + c.getConstrutor().getNome() + " | CPF: " + c.getConstrutor().getCpf());
                     System.out.println("Obra: #" + c.getObra().getId());
                     System.out.println("Data de início do contrato: " + c.getDataInicio());
                     System.out.println("Data de finalização do contrato: " + c.getDataFim());
                     System.out.println("");
                 }
-            break;
-            case 0:
+            }
+            case 0 -> {
                 System.out.println("Saindo!");
                 System.exit(0);
-            break;
+            }
         }
     }
 }

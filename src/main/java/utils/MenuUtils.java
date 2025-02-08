@@ -1,6 +1,10 @@
 package utils;
 
+import java.util.Scanner;
+
 public class MenuUtils {
+    private static Scanner scanner = new Scanner(System.in);
+    
     public static void construtorMainMenu () {
         System.out.println("===== CONSTRUTOR =====");
         System.out.println("1 - Verificar contratos");
@@ -35,9 +39,9 @@ public class MenuUtils {
         System.out.println("4 - Gerenciar funcionários");
         System.out.println("5 - Gerenciar engenheiros");
         System.out.println("6 - Gerenciar obras");
-        System.out.println("7 - Gerenciar contratos");
-        System.out.println("8 - Gerenciar pagamentos");
-        System.out.println("9 - Gerenciar recebimentos");
+        System.out.println("7 - Adicionar contrato");
+        System.out.println("8 - Adicionar pagamento");
+        System.out.println("9 - Adicionar recebimento");
         System.out.println("0 - Sair");
     }
     
@@ -84,13 +88,12 @@ public class MenuUtils {
     public static void administradorSubMenu6 () {
         System.out.println("===== GERENCIAR OBRAS =====");
         System.out.println("1 - Cadastrar obra");
-        System.out.println("2 - Aprovar obra");
-        System.out.println("3 - Reprovar obra");
-        System.out.println("4 - Buscar obra por ID");
-        System.out.println("5 - Voltar");
+        System.out.println("2 - Aprovar/Reprovar obra");
+        System.out.println("3 - Buscar obra por ID");
+        System.out.println("4 - Voltar");
     }
     
-    public static void administradorSubMenu7 () {
+    /* public static void administradorSubMenu7 () {
         System.out.println("===== GERENCIAR CONTRATOS =====");
         System.out.println("1 - Cadastrar contrato");
         System.out.println("2 - Editar contrato");
@@ -114,5 +117,21 @@ public class MenuUtils {
         System.out.println("2 - Editar recebimento");
         System.out.println("3 - Listar recebimento");
         System.out.println("4 - Voltar");
+    } */
+    
+    public static int selecionarOpcao (int primeiraOpcao, int ultimaOpcao) {
+        int opcao;
+        
+        do {
+            System.out.print("Digite: ");
+            opcao = MenuUtils.scanner.nextInt();
+            
+            if (opcao < primeiraOpcao || opcao > ultimaOpcao) {
+                System.out.println("===== OPÇÃO INVÁLIDA =====");
+            }
+        }
+        while(opcao < primeiraOpcao || opcao > ultimaOpcao);
+        
+        return opcao;
     }
 }

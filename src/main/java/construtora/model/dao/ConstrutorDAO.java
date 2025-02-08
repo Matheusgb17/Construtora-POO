@@ -67,7 +67,7 @@ public class ConstrutorDAO {
      * @return TAD do construtor achado ou NULL
      */
     public Construtor find(int id) {
-        String sqlConstrutor = "SELECT construtor.id, construtor.tipoServico, usuario.nome, usuario.cpf, usuario.telefone, usuario.senha, usuario.papel FROM construtor, usuario WHERE usuario_id = ? AND usuario.id = construtor.usuario_id";
+        String sqlConstrutor = "SELECT construtor.id, construtor.tipoServico, usuario.nome, usuario.cpf, usuario.telefone, usuario.senha, usuario.papel FROM construtor, usuario WHERE construtor.id = ? AND usuario.id = construtor.usuario_id";
 
         try (
              PreparedStatement stmtConstrutor = conexao.prepareStatement(sqlConstrutor)) {
@@ -264,5 +264,15 @@ public class ConstrutorDAO {
     // Getters e setters
     public String getTableName() {
         return tableName;
+    }
+    
+    public void close() {
+        try {
+            if (conexao != null && !conexao.isClosed()) {
+                conexao.close();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

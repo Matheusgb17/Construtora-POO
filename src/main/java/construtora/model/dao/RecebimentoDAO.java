@@ -159,4 +159,14 @@ public class RecebimentoDAO {
     public String getTableName() {
         return tableName;
     }
+    
+    public void close() {
+        try {
+            if (conexao != null && !conexao.isClosed()) {
+                conexao.close();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }
