@@ -45,4 +45,10 @@ public class ObraService {
         od.close();
         return obras;
     }
+    
+    public void atualizarObra (Obra obra) {
+        ObraDAO obraDAO = new ObraDAO();
+        obraDAO.update(obra);
+        obraDAO.close();
+    }
 }

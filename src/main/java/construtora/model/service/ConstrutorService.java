@@ -26,4 +26,16 @@ public class ConstrutorService {
         
         return contratos;
     }
+    
+    public List<Construtor> listarTodosConstrutores(){
+        ConstrutorDAO construtorDAO = new ConstrutorDAO();
+        List<Construtor> construtores = construtorDAO.findAll();
+        return construtores;
+    }
+    
+    public void atualizarConstrutor (Construtor construtor) {
+        ConstrutorDAO construtorDAO = new ConstrutorDAO();
+        construtorDAO.update(construtor);
+        construtorDAO.close();
+    }
 }

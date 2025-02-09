@@ -7,7 +7,7 @@ import java.sql.SQLException;
 public class Conexao {
     public static final String URL = "jdbc:mysql://localhost:3306/construtora?useUnicode=true&characterEncoding=UTF-8";
     public static final String USER = "root";
-    public static final String PASSWORD = "1lovemyc4t!";
+    public static final String PASSWORD = "100306";
     
     public static Connection getConexao () {
         try {

@@ -25,4 +25,17 @@ public class FuncionarioService {
         cd.close();
         return contratos;
     }
+    
+    public List<Funcionario> listarTodosFuncionarios(){
+        FuncionarioDAO funcionarioDAO = new FuncionarioDAO();
+        List<Funcionario> funcionarios = funcionarioDAO.findAll();
+        return funcionarios;
+    }
+    
+    public void atualizarFuncionario (Funcionario funcionario) {
+        FuncionarioDAO funcionarioDAO = new FuncionarioDAO();
+        funcionarioDAO.update(funcionario);
+        funcionarioDAO.close();
+    }
+    
 }

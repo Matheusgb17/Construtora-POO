@@ -1,5 +1,9 @@
 package construtora.controller;
 
+import construtora.model.dao.ClienteDAO;
+import construtora.model.dao.ConstrutorDAO;
+import construtora.model.dao.EngenheiroDAO;
+import construtora.model.dao.FuncionarioDAO;
 import construtora.model.entity.*;
 import construtora.model.service.*;
 import java.time.LocalDate;
@@ -19,6 +23,7 @@ public class AdministradorController {
     private EngenheiroService engenheiroService = new EngenheiroService();
     private ObraService obraService = new ObraService();
     private ContratoService contratoService = new ContratoService();
+    private FuncionarioService funcionarioService = new FuncionarioService();
     
     public void executarAcaoAdministrador (int opcao, Administrador administrador) {
         int opcaoSecundaria;
@@ -119,18 +124,361 @@ public class AdministradorController {
     
     public void executarAcao2Administrador (int opcao, Administrador administrador) {
         if (this.scanner.hasNextLine()) this.scanner.nextLine();
+        
+        switch (opcao) {
+            case 1 -> { 
+                System.out.println("=== CADASTRANDO NOVO CLIENTE ===");
+                
+                Cliente cliente = new Cliente();
+                administradorService.cadastrarCliente(cliente);
+            }
+            case 2 -> {
+                System.out.println("=== EDITAR CLIENTE ===");
+                System.out.println("Informe o CPF do cliente que deseja editar: ");
+                String cpf = scanner.nextLine();
+                Cliente cliente = clienteService.recuperarCliente(cpf);
+                
+                System.out.println("Atualize os dados. para manter o valor atual, apenas aperte Enter.");
+
+                System.out.print("Nome [" + cliente.getNome() + "]: ");
+                String entrada = this.scanner.nextLine();
+                if (!entrada.isEmpty()) cliente.setNome(entrada);
+
+                System.out.print("CPF [" + cliente.getCpf()+ "]: ");
+                entrada = this.scanner.nextLine();
+                if (!entrada.isEmpty()) cliente.setCpf(entrada);
+
+                System.out.print("Telefone [" + cliente.getTelefone() + "]: ");
+                entrada = this.scanner.nextLine();
+                if (!entrada.isEmpty()) cliente.setTelefone(entrada);
+                
+                System.out.print("Papel [" + cliente.getPapel() + "]: ");
+                entrada = this.scanner.nextLine();
+                if (!entrada.isEmpty()) cliente.setPapel(entrada);
+                
+                System.out.print("Senha [********]: ");
+                entrada = this.scanner.nextLine();
+                if (!entrada.isEmpty()) cliente.setSenha(PasswordUtils.criptografarSenha(entrada));
+                
+                clienteService.atualizarCliente(cliente);
+                
+                System.out.println("Cliente atualizado com sucesso!");
+            }
+            case 3 -> {
+                System.out.println("=== DELETAR CLIENTE ===");
+                
+                System.out.println("Informe o CPF do cliente que deseja deletar: ");
+                String cpf = scanner.nextLine();
+                
+                ClienteDAO cd = new ClienteDAO();
+                cd.delete(cpf);
+                
+                System.out.print("Cliente deleado com sucesso!");
+            }
+            case 4 -> {
+                System.out.println("=== BUSCAR CLIENTE POR CPF ===");
+                
+                System.out.println("Insira o CPF do cliente: ");
+                String cpf = scanner.nextLine();
+                
+                Cliente cliente = clienteService.recuperarCliente(cpf);
+                
+                System.out.println("Cliente #" + cliente.getId());
+                System.out.println("Nome: " + cliente.getNome());
+                System.out.println("Cpf: " + cliente.getCpf());
+                System.out.println("Telefone: " + cliente.getTelefone());
+                System.out.println("Papel: " + cliente.getPapel());
+            }
+            case 5 -> {
+                System.out.println("=== TODOS OS CLIENTES ===");
+                
+                List<Cliente> clientes = clienteService.listarTodosClientes();
+                
+                for (Cliente c : clientes){
+                    System.out.println("Cliente #" + c.getId());
+                    System.out.println("Nome: " + c.getNome());
+                    System.out.println("Cpf: " + c.getCpf());
+                    System.out.println("Telefone: "+ c.getTelefone());
+                    System.out.println("Papel: " + c.getPapel());
+                }
+            }
+        }   
     }
     
     public void executarAcao3Administrador (int opcao, Administrador administrador) {
         if (this.scanner.hasNextLine()) this.scanner.nextLine();
+        
+        switch(opcao){
+            case 1 -> {
+                System.out.println("=== CADASTRANDO NOVO CONSTRUTOR ===");
+                Construtor construtor = new Construtor();
+                administradorService.cadastrarConstrutor(construtor);
+            }
+            case 2 -> {
+                System.out.println("=== EDITAR CONSTRUTOR ===");
+                System.out.println("Informe o CPF do construtor que deseja editar: ");
+                String cpf = scanner.nextLine();
+                Construtor construtor = construtorService.recuperarConstrutor(cpf);
+                
+                System.out.println("Atualize os dados. para manter o valor atual, apenas aperte Enter.");
+
+                System.out.print("Nome [" + construtor.getNome() + "]: ");
+                String entrada = this.scanner.nextLine();
+                if (!entrada.isEmpty()) construtor.setNome(entrada);
+
+                System.out.print("CPF [" + construtor.getCpf()+ "]: ");
+                entrada = this.scanner.nextLine();
+                if (!entrada.isEmpty()) construtor.setCpf(entrada);
+
+                System.out.print("Telefone [" + construtor.getTelefone() + "]: ");
+                entrada = this.scanner.nextLine();
+                if (!entrada.isEmpty()) construtor.setTelefone(entrada);
+                
+                System.out.println("Tipo serviço [" + construtor.getTipoServico() + "]: ");
+                entrada = this.scanner.nextLine();
+                if (!entrada.isEmpty()) construtor.setTipoServico(entrada);
+                
+                System.out.print("Papel [" + construtor.getPapel() + "]: ");
+                entrada = this.scanner.nextLine();
+                if (!entrada.isEmpty()) construtor.setPapel(entrada);
+                
+                System.out.print("Senha [********]: ");
+                entrada = this.scanner.nextLine();
+                if (!entrada.isEmpty()) construtor.setSenha(PasswordUtils.criptografarSenha(entrada));
+                
+                construtorService.atualizarConstrutor(construtor);
+                
+                System.out.println("Construtor atualizado com sucesso!");
+            }
+            case 3 -> {
+                System.out.println("=== DELETAR CONSTRUTOR ====");
+                System.out.println("Insira o CPF do construtor que deseja deletar: ");
+                String cpf = scanner.nextLine();
+                
+                ConstrutorDAO cd = new ConstrutorDAO();
+                cd.delete(cpf);
+            }
+            case 4 -> {
+                System.out.println("=== BUSCAR CONSTRUTOR POR CPF ===");
+                
+                System.out.println("Insira o CPF do construtor: ");
+                String cpf = scanner.nextLine();
+                
+                Construtor construtor = construtorService.recuperarConstrutor(cpf);
+                
+                System.out.println("Construtor #" + construtor.getId());
+                System.out.println("Nome: " + construtor.getNome());
+                System.out.println("Cpf: " + construtor.getCpf());
+                System.out.println("Telefone: " + construtor.getTelefone());
+                System.out.println("Tipo de serviço: " + construtor.getTipoServico());
+                System.out.println("Papel: " + construtor.getPapel());
+            }
+            case 5 -> {
+                System.out.println("=== TODOS OS CONSTRUTORES ===");
+                List<Construtor> construtores = construtorService.listarTodosConstrutores();
+                
+                for (Construtor c : construtores){
+                    System.out.println("Construtor #" + c.getId());
+                    System.out.println("Nome: " + c.getNome());
+                    System.out.println("Cpf: " + c.getCpf());
+                    System.out.println("Telefone: "+ c.getTelefone());
+                    System.out.println("Tipo de serviço: " + c.getTipoServico());
+                    System.out.println("Papel: " + c.getPapel());
+                }
+            }
+        }
     }
     
     public void executarAcao4Administrador (int opcao, Administrador administrador) {
         if (this.scanner.hasNextLine()) this.scanner.nextLine();
+        
+        switch(opcao){
+            
+            case 1 -> {
+                System.out.println("=== CADASTRAR FUNCIONARIO ===");
+                Funcionario funcionario = new Funcionario();
+                
+                System.out.println("Insira o CPF do construtor responsável pelo funcionário a ser cadastrado: ");
+                String cpf = scanner.nextLine();
+               
+                Construtor construtor = construtorService.recuperarConstrutor(cpf);
+                
+                administradorService.cadastrarFuncionario(funcionario, construtor);
+            }
+            case 2 -> {
+                System.out.println("=== EDITAR FUNCIONARIO ===");
+                System.out.println("Informe o CPF do funcionario que deseja editar: ");
+                String cpf = scanner.nextLine();
+                Funcionario funcionario = funcionarioService.recuperarFuncionario(cpf);
+                
+                System.out.println("Atualize os dados. para manter o valor atual, apenas aperte Enter.");
+
+                System.out.print("Nome [" + funcionario.getNome() + "]: ");
+                String entrada = this.scanner.nextLine();
+                if (!entrada.isEmpty()) funcionario.setNome(entrada);
+                
+                System.out.print("CPF [" + funcionario.getCpf()+ "]: ");
+                entrada = this.scanner.nextLine();
+                if (!entrada.isEmpty()) funcionario.setCpf(entrada);
+                
+                System.out.println("Cargo [" + funcionario.getCargo()+ "]: ");
+                entrada = this.scanner.nextLine();
+                if (!entrada.isEmpty()) funcionario.setCargo(entrada);
+                
+                System.out.println("Construtor [" + funcionario.getConstrutor().getNome()+ "]:");
+                entrada = this.scanner.nextLine();
+                if (!entrada.isEmpty()){
+                    System.out.println("Informe o CPF do construtor: ");
+                    String cpfC = scanner.nextLine();
+                    Construtor construtor = construtorService.recuperarConstrutor(cpfC);
+                    funcionario.setConstrutor(construtor);
+                }
+
+                System.out.print("Telefone [" + funcionario.getTelefone() + "]: ");
+                entrada = this.scanner.nextLine();
+                if (!entrada.isEmpty()) funcionario.setTelefone(entrada);
+                
+                System.out.print("Papel [" + funcionario.getPapel() + "]: ");
+                entrada = this.scanner.nextLine();
+                if (!entrada.isEmpty()) funcionario.setPapel(entrada);
+                
+                System.out.print("Senha [********]: ");
+                entrada = this.scanner.nextLine();
+                if (!entrada.isEmpty()) funcionario.setSenha(PasswordUtils.criptografarSenha(entrada));
+                
+                funcionarioService.atualizarFuncionario(funcionario);
+                
+                System.out.println("Funcionário atualizado com sucesso!");
+            }
+            case 3 -> {
+                System.out.println("=== DELETAR FUNCIONÁRIO ===");
+                System.out.println("Insira o CPF do funcionário que deseja deletar: ");
+                String cpf = scanner.nextLine();
+                
+                FuncionarioDAO fd = new FuncionarioDAO();
+                fd.delete(cpf);
+            }
+            case 4 -> {
+                System.out.println("=== BUSCAR FUNCIONÁRIO POR CPF ===");
+                
+                System.out.println("Insira o CPF do funcionário: ");
+                String cpf = scanner.nextLine();
+                
+                Funcionario funcionario = funcionarioService.recuperarFuncionario(cpf);
+                
+                System.out.println("Funcionário #" + funcionario.getId());
+                System.out.println("Nome: " + funcionario.getNome());
+                System.out.println("Cpf: " + funcionario.getCpf());
+                System.out.println("Cargo: " + funcionario.getCargo());
+                System.out.println("Construtor: " + funcionario.getConstrutor().getNome());
+                System.out.println("Telefone: " + funcionario.getTelefone());
+                System.out.println("Papel: " + funcionario.getPapel());   
+            }
+            case 5 -> {
+                System.out.println("=== TODOS OS FUNCIONÁRIOS ===");
+                List<Funcionario> funcionarios = funcionarioService.listarTodosFuncionarios();
+                
+                for(Funcionario f : funcionarios){
+                    System.out.println("Funcionário #" + f.getId());
+                    System.out.println("Nome: " + f.getNome());
+                    System.out.println("Cpf: " + f.getCpf());
+                    System.out.println("Cargo: " + f.getCargo());
+                    System.out.println("Construtor: " + f.getConstrutor().getNome());
+                    System.out.println("Telefone: " + f.getTelefone());
+                    System.out.println("Papel: " + f.getPapel());
+                }
+            }
+        }
+        
+        
+            
+        
     }
     
     public void executarAcao5Administrador (int opcao, Administrador administrador) {
         if (this.scanner.hasNextLine()) this.scanner.nextLine();
+        
+        switch(opcao){
+            case 1 ->{
+                System.out.println("=== CADASTRAR ENGENHEIRO ===");
+                Engenheiro engenheiro = new Engenheiro();
+                administradorService.cadastrarEngenheiro(engenheiro);
+            }
+            case 2 ->{
+                System.out.println("=== EDITAR ENGENHEIRO ===");
+                System.out.println("Informe o CPF do construtor que deseja editar: ");
+                String cpf = scanner.nextLine();
+                Engenheiro engenheiro = engenheiroService.recuperarEngenheiro(cpf);
+                
+                System.out.println("Atualize os dados. para manter o valor atual, apenas aperte Enter.");
+
+                System.out.print("Nome [" + engenheiro.getNome() + "]: ");
+                String entrada = this.scanner.nextLine();
+                if (!entrada.isEmpty()) engenheiro.setNome(entrada);
+                
+                System.out.println("CREA [" + engenheiro.getCrea() + "]: ");
+                entrada = this.scanner.nextLine();
+                if (!entrada.isEmpty()) engenheiro.setCrea(entrada);
+
+                System.out.print("CPF [" + engenheiro.getCpf()+ "]: ");
+                entrada = this.scanner.nextLine();
+                if (!entrada.isEmpty()) engenheiro.setCpf(entrada);
+
+                System.out.print("Telefone [" + engenheiro.getTelefone() + "]: ");
+                entrada = this.scanner.nextLine();
+                if (!entrada.isEmpty()) engenheiro.setTelefone(entrada);
+                
+                System.out.print("Papel [" + engenheiro.getPapel() + "]: ");
+                entrada = this.scanner.nextLine();
+                if (!entrada.isEmpty()) engenheiro.setPapel(entrada);
+                
+                System.out.print("Senha [********]: ");
+                entrada = this.scanner.nextLine();
+                if (!entrada.isEmpty()) engenheiro.setSenha(PasswordUtils.criptografarSenha(entrada));
+                
+                engenheiroService.atualizarEngenheiro(engenheiro);
+                
+                System.out.println("Engenheiro atualizado com sucesso!");
+            }
+            case 3 -> {
+                System.out.println("=== DELETAR ENGENHEIRO ====");
+                System.out.println("Insira o CPF do engenheiro que deseja deletar: ");
+                String cpf = scanner.nextLine();
+                
+                EngenheiroDAO ed = new EngenheiroDAO();
+                ed.delete(cpf);
+            }
+            case 4 -> {
+                System.out.println("=== BUSCAR ENGENHEIRO POR CPF ===");
+                
+                System.out.println("Insira o CPF do engenheiro: ");
+                String cpf = scanner.nextLine();
+                
+                Engenheiro engenheiro = engenheiroService.recuperarEngenheiro(cpf);
+                
+                System.out.println("Engenheiro #" + engenheiro.getId());
+                System.out.println("CREA: " + engenheiro.getCrea());
+                System.out.println("Nome: " + engenheiro.getNome());
+                System.out.println("Cpf: " + engenheiro.getCpf());
+                System.out.println("Telefone: " + engenheiro.getTelefone());
+                System.out.println("Papel: " + engenheiro.getPapel());
+            }
+            case 5 -> {
+                System.out.println("=== TODOS OS ENGENHEIROS ===");
+                
+                List<Engenheiro> engenheiros = engenheiroService.listarTodosEngenheiros();
+                
+                for(Engenheiro e : engenheiros){
+                    System.out.println("Engenheiro #" + e.getId());
+                    System.out.println("CREA: " + e.getCrea());
+                    System.out.println("Nome: " + e.getNome());
+                    System.out.println("Cpf: " + e.getCpf());
+                    System.out.println("Telefone: " + e.getTelefone());
+                    System.out.println("Papel: " + e.getPapel());
+                }
+                
+            }
+        }
     }
     
     public void executarAcao6Administrador (int opcao, Administrador administrador) {
@@ -139,6 +487,7 @@ public class AdministradorController {
         switch (opcao) {
             case 1 -> { // Cadastrar obra pelo cliente
                 System.out.println("=== CADASTRANDO NOVA OBRA ===");
+                
                 
                 System.out.println("Digite o CPF do cliente solicitante: ");
                 String cpf = this.scanner.nextLine();

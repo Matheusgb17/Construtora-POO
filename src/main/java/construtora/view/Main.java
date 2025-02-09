@@ -55,8 +55,10 @@ public class Main {
                 }
                 
                 case "cliente" -> {
+                    clienteLogado = lc.recuperarClienteLogado(usuarioLogado);
                     MenuUtils.clienteMainMenu();
                     opcao = MenuUtils.selecionarOpcao(0, 3);
+                    cc.executarAcaoCliente(opcao, clienteLogado);
                 }
                 
                 case "construtor" -> {

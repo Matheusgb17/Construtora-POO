@@ -31,11 +31,23 @@ public class EngenheiroService {
         return contratos;
     }
     
+    public List<Engenheiro> listarTodosEngenheiros(){
+        EngenheiroDAO engenheiroDAO = new EngenheiroDAO();
+        List<Engenheiro> engenheiros = engenheiroDAO.findAll();
+        return engenheiros;
+    }
+            
     public Engenheiro recuperarEngenheiro (String cpf) {
         EngenheiroDAO ed = new EngenheiroDAO();
         Engenheiro eng = ed.find(cpf);
         ed.close();
         
         return eng;
+    }
+    
+    public void atualizarEngenheiro (Engenheiro engenheiro) {
+        EngenheiroDAO engenheiroDAO = new EngenheiroDAO();
+        engenheiroDAO.update(engenheiro);
+        engenheiroDAO.close();
     }
 }

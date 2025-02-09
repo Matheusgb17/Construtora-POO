@@ -52,6 +52,12 @@ public class ClienteService {
 
         return obras;
     }
+   
+    public List<Cliente> listarTodosClientes(){
+        ClienteDAO clienteDAO = new ClienteDAO();
+        List<Cliente> clientes = clienteDAO.findAll();
+        return clientes;
+    }
     
     public Cliente recuperarCliente (String cpf) {
         ClienteDAO clid = new ClienteDAO();
@@ -59,4 +65,12 @@ public class ClienteService {
         clid.close();
         return cli;
     }
+    
+    public void atualizarCliente (Cliente cliente) {
+        ClienteDAO clienteDAO = new ClienteDAO();
+        clienteDAO.update(cliente);
+        clienteDAO.close();
+    }
+    
+   
 }

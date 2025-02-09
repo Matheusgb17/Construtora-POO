@@ -47,9 +47,9 @@ public class AdministradorService {
         System.out.println("Digite a senha de acesso: ");
         String senha = scanner.nextLine();
         cliente.setSenha(senha);
-
+        
         // Define o status inicial do cliente
-        cliente.setStatus("ativo");
+        cliente.setStatus("Ativo");
 
         // Cria o cliente no banco de dados
         int retornoId = clienteDAO.create(cliente);

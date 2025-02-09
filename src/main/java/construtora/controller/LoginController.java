@@ -11,6 +11,7 @@ public class LoginController {
     private ConstrutorService cons = new ConstrutorService();
     private FuncionarioService fs = new FuncionarioService();
     private AdministradorService as = new AdministradorService();
+    private ClienteService cs = new ClienteService();
     private Scanner scanner = new Scanner(System.in);
     
     public Usuario opcoesLogin () {
@@ -90,4 +91,11 @@ public class LoginController {
         Administrador administradorLogado = as.recuperarAdministrador(usuarioLogado.getCpf());
         return administradorLogado;
     }
+    
+    public Cliente recuperarClienteLogado (Usuario usuarioLogado){
+        Cliente clienteLogado = cs.recuperarCliente(usuarioLogado.getCpf());
+        return clienteLogado;
+    }
+
+    
 }
