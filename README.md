@@ -38,4 +38,5 @@ Esta aplicação usa um sistema de seeding para facilitar algumas operações po
 | Construtor    | 77777777777 | 123456789 | Acesso às funcionalidades referentes ao construtor  |
 | Engenheiro    | 66666666666 | 123456789 | Acesso às funcionalidades referentes ao engenheiro  |
 | Funcionário   | 55555555555 | 123456789 | Acesso às funcionalidades referentes ao funcionário |
+
 Os dados aleatórios são inseridos caso não haja um administrador padrão cadastrado na aplicação. Se esse for o caso, insere-se 100 registros variando entre todos os papéis: administrador, cliente, construtor, engenheiro e funcionário.
