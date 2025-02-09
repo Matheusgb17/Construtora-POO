@@ -3,6 +3,13 @@
 
 O código neste repositório refere-se ao trabalho final da disciplina de *Programação Orientada a Objetos*, ministrada pela professora *Patrícia Aparecida Proença Ávila*.
 
+**Os membros participantes neste projeto são:**
+ - Guilherme Vinicius Miranda de Oliveira, **Matrícula:** 0078277
+ - Gustavo Henrique Pereira Vilela, **Matrícula:** 0076618
+ - Iasmim Garcia Castro, **Matrícula:** 0076936
+ - Maria Luzia de Moura Sanches, **Matrícula:** 0076637
+ - Matheus Garcia Batista, **Matrícula:** 0076638
+
 ## Diagrama de classes
 
 Até o dia 11/12/2024, o diagrama de classes deste projeto é o que está a seguir. Uma vez que esse código passará por posteriores modificações até sua versão finalizada, o diagrama de classes também mudará.
