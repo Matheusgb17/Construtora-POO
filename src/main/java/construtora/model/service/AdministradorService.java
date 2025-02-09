@@ -198,10 +198,10 @@ public class AdministradorService {
             }
         } while (!utils.TelefoneUtils.validarTelefone(telefone));
         engenheiro.setTelefone(telefone);
-
-        // Captura do tipo de serviço
-        System.out.println("Digite o tipo de serviço do engenheiro: ");
-        engenheiro.setTipoServico(scanner.nextLine());
+        
+        System.out.println("Digite o CREA do engenheiro: ");
+        String crea = scanner.nextLine();
+        engenheiro.setCrea(crea);
 
         // Solicita a senha ao usuário
         System.out.println("Digite a senha de acesso: ");
@@ -316,7 +316,7 @@ public class AdministradorService {
 
     public void gerarContratoDeObra(Obra obra) {
         // Define o nome do arquivo de contrato
-        String nomeArquivo = "recibos/contratos/Contrato_Obra_" + obra.getId() + "_" + LocalDateTime.now() +".txt";
+        String nomeArquivo = "recibos/contratos/Contrato_Obra_" + obra.getId() + "_" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy-HH-mm-ss")) +".txt";
 
         try (FileWriter writer = new FileWriter(nomeArquivo)) {
             writer.write("===========================================\n");

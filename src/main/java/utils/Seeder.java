@@ -7,11 +7,6 @@ import java.util.*;
 public class Seeder {
     
     private Random random;
-    private AdministradorDAO ad = new AdministradorDAO();
-    private ClienteDAO cd = new ClienteDAO();
-    private ConstrutorDAO cond = new ConstrutorDAO();
-    private EngenheiroDAO ed = new EngenheiroDAO();
-    private FuncionarioDAO fd = new FuncionarioDAO();
     
     private String[] papeis = { "administrador", "cliente", "construtor", "engenheiro", "funcionario" };
     
@@ -23,10 +18,10 @@ public class Seeder {
         String papel;
         
         /* Gerando o usuário administrador padrão, se necessário. */
-        gerarAdministradorPadrao();
+        this.gerarUsuariosPadrao();
         
         /* Gerando dados aleatórios no banco. */
-        for (int i = 0; i < random.nextInt(100) + 1; i++) {
+        for (int i = 0; i < 100; i++) {
             papel = this.escolherPapelAleatorio();
         
             switch (papel) {
@@ -151,6 +146,7 @@ public class Seeder {
     }
     
     private void gerarAdministrador (String papel) {
+        AdministradorDAO ad = new AdministradorDAO();
         Administrador adm = new Administrador(
                 "adm", 
                 0, 
@@ -161,10 +157,13 @@ public class Seeder {
                 papel
         );
         
-        this.ad.create(adm);
+        ad.create(adm);
+        ad.close();
     }
     
     private void gerarCliente (String papel) {
+        ClienteDAO cd = new ClienteDAO();
+        
         Cliente cli = new Cliente(
                 this.escolherStatusAleatorio(),
                 0, 
@@ -175,10 +174,13 @@ public class Seeder {
                 papel
         );
         
-        this.cd.create(cli);
+        cd.create(cli);
+        cd.close();
     }
     
     private void gerarConstrutor (String papel) {
+        ConstrutorDAO cond = new ConstrutorDAO();
+        
         Construtor cons = new Construtor(
                 this.escolherServicoAleatorio(), 
                 0, 
@@ -190,9 +192,12 @@ public class Seeder {
         );
         
         cond.create(cons);
+        cond.close();
     }
     
     private void gerarEngenheiro (String papel) {
+        EngenheiroDAO ed = new EngenheiroDAO();
+        
         Engenheiro eng = new Engenheiro(
                 this.gerarRegistroCREAAleatorio(), 
                 0, 
@@ -203,11 +208,15 @@ public class Seeder {
                 papel
         );
         
-        this.ed.create(eng);
+        ed.create(eng);
+        ed.close();
     }
     
     private void gerarFuncionario (String papel) {
-        List<Construtor> construtores = this.cond.findAll();
+        ConstrutorDAO cond = new ConstrutorDAO();
+        FuncionarioDAO fd = new FuncionarioDAO();
+        
+        List<Construtor> construtores = cond.findAll();
         
         if (construtores.isEmpty()) {
             return;
@@ -227,22 +236,94 @@ public class Seeder {
                 papel
         );
         
-        this.fd.create(func);
+        fd.create(func);
+        fd.close();
+        
+        cond.close();
     }
     
-    public void gerarAdministradorPadrao () {
-        if (this.ad.find("99999999999") == null) {
-            Administrador padrao = new Administrador(
+    public void gerarUsuariosPadrao () {
+        AdministradorDAO ad = new AdministradorDAO();
+        ClienteDAO cd = new ClienteDAO();
+        ConstrutorDAO cond = new ConstrutorDAO();
+        EngenheiroDAO ed = new EngenheiroDAO();
+        FuncionarioDAO fd = new FuncionarioDAO();
+        
+        if (ad.find("99999999999") == null) {
+            Administrador admPadrao = new Administrador(
                     "Cargo padrão", 
                     0, 
-                    "Default", 
+                    "Administrador Padrão", 
                     "99999999999", 
                     "00000000000", 
                     "123456789", 
                     ad.getTableName()
             );
             
-            this.ad.create(padrao);
+            ad.create(admPadrao);
         }
+        
+        if (cd.find("88888888888") == null) {
+            Cliente cliPadrao = new Cliente(
+                    "Ativo", 
+                    0, 
+                    "Cliente Padrão",
+                    "88888888888",
+                    "11111111111",
+                    "123456789",
+                    cd.getTableName()
+            );
+            
+            cd.create(cliPadrao);
+        }
+        
+        if (cond.find("77777777777") == null) {
+            Construtor consPadrao = new Construtor(
+                    "Serviço padrão", 
+                    0, 
+                    "Construtor Padrão", 
+                    "77777777777", 
+                    "22222222222", 
+                    "123456789", 
+                    cond.getTableName()
+            );
+            
+            cond.create(consPadrao);
+        }
+        
+        if (ed.find("66666666666") == null) {
+            Engenheiro engPadrao = new Engenheiro(
+                    "9999/99", 
+                    0, 
+                    "Engenheiro Padrão", 
+                    "66666666666", 
+                    "33333333333", 
+                    "123456789", 
+                    ed.getTableName()
+            );
+            
+            ed.create(engPadrao);
+        }
+        
+        if (fd.find("55555555555") == null) {
+            Funcionario funcPadrao = new Funcionario(
+                    "Cargo Padrão", 
+                    cond.find("77777777777"), 
+                    0, 
+                    "Funcionário Padrão", 
+                    "55555555555",
+                    "44444444444", 
+                    "123456789", 
+                    fd.getTableName()
+            );
+            
+            fd.create(funcPadrao);
+        }
+        
+        ad.close();
+        cd.close();
+        cond.close();
+        ed.close();
+        fd.close();
     }
 }

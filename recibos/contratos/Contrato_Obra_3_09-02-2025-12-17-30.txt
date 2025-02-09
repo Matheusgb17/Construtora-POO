@@ -1,0 +1,17 @@
+===========================================
+      CONTRATO DE PRESTAÇÃO DE OBRAS     
+===========================================
+
+Data: 09/02/2025
+ID da Obra: 3
+Endereço: Rua das Amélias
+Tipo de Obra: Estádio de futebol
+Status: Aprovada
+Cliente: 88888888888 - Cliente Padrão
+
+Pelo presente instrumento, a empresa se compromete a realizar a obra nos termos estabelecidos.
+
+-------------------------------------------
+Assinatura do Cliente: ___________________
+
+Assinatura da Empresa: ___________________

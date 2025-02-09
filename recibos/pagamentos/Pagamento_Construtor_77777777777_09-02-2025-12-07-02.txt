@@ -1,0 +1,15 @@
+===========================================
+            RECIBO DE PAGAMENTO           
+===========================================
+
+Data: 09/02/2025
+CPF do Construtor: 77777777777
+Nome do Construtor: Construtor Padrão
+Descrição: pagamento 2
+Valor: R$ 456,00
+
+A construtora confirma o pagamento ao profissional acima pelo serviço prestado.
+
+-------------------------------------------
+Assinatura do Construtor: ___________________
+Assinatura da Construtora: ___________________

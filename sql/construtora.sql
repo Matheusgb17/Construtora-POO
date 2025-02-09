@@ -162,18 +162,18 @@ CREATE TABLE IF NOT EXISTS `construtora`.`contrato` (
   CONSTRAINT `fk_contrato_obra1`
     FOREIGN KEY (`obra_id`)
     REFERENCES `construtora`.`obra` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
   CONSTRAINT `fk_contrato_engenheiro1`
     FOREIGN KEY (`engenheiro_id`)
     REFERENCES `construtora`.`engenheiro` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
   CONSTRAINT `fk_contrato_construtor1`
     FOREIGN KEY (`construtor_id`)
     REFERENCES `construtora`.`construtor` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 
@@ -190,8 +190,8 @@ CREATE TABLE IF NOT EXISTS `construtora`.`transferencia` (
   CONSTRAINT `fk_transferencia_administrador1`
     FOREIGN KEY (`administrador_id`)
     REFERENCES `construtora`.`administrador` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 
@@ -213,8 +213,8 @@ CREATE TABLE IF NOT EXISTS `construtora`.`recebimento` (
   CONSTRAINT `fk_recebimento_cliente1`
     FOREIGN KEY (`cliente_id`)
     REFERENCES `construtora`.`cliente` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 
@@ -236,8 +236,8 @@ CREATE TABLE IF NOT EXISTS `construtora`.`pagamento` (
   CONSTRAINT `fk_pagamento_construtor1`
     FOREIGN KEY (`construtor_id`)
     REFERENCES `construtora`.`construtor` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 

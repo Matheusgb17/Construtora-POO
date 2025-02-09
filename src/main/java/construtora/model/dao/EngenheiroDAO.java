@@ -34,6 +34,9 @@ public class EngenheiroDAO {
      */
     public int create(Engenheiro engenheiro) {
         int codigoGerado = -1;
+        
+        engenheiro.setPapel(this.getTableName());
+        
         // Inserindo os dados base na tabela de usuários.
         int usuarioId = this.usuarioDAO.create(engenheiro);
         

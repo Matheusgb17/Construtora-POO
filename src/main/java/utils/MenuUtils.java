@@ -27,7 +27,7 @@ public class MenuUtils {
         System.out.println("===== CLIENTE =====");
         System.out.println("1 - Solicitar obra");
         System.out.println("2 - Visualizar obras");
-        System.out.println("3 - Editar dados");
+        System.out.println("3 - Editar dados de uma obra sua");
         System.out.println("0 - Sair");
     }
     
@@ -39,7 +39,7 @@ public class MenuUtils {
         System.out.println("4 - Gerenciar funcionários");
         System.out.println("5 - Gerenciar engenheiros");
         System.out.println("6 - Gerenciar obras");
-        System.out.println("7 - Adicionar contrato");
+        System.out.println("7 - Gerenciar contratos");
         System.out.println("8 - Adicionar pagamento");
         System.out.println("9 - Adicionar recebimento");
         System.out.println("0 - Sair");

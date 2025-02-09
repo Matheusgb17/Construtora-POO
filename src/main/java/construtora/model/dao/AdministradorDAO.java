@@ -31,6 +31,8 @@ public class AdministradorDAO {
      * @param administrador TAD do administrador a ser inserido
      */
     public void create (Administrador administrador) {
+        administrador.setPapel(this.getTableName());
+        
         /* Inserindo os dados base na tabela de usuários.
          * Isso é possível pois Administrador herda de Usuario. */
         int usuarioId = this.usuarioDAO.create(administrador);

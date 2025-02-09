@@ -20,19 +20,18 @@ public class ClienteController {
     ObraDAO od = new ObraDAO();
     
     public void executarAcaoCliente(int opcao, Cliente clienteLogado){
-        
         switch(opcao){
-            case 1:
+            case 1 -> {
                 System.out.println("=== SOLICITANDO NOVA OBRA ===");
                 
-                System.out.println("Infome o endereço da obra: ");
+                System.out.println("Infome o endereço da obra pretendida: ");
                 String endereco = this.sc.nextLine();
-                System.out.println("Informe o tipo da obra: ");
+                System.out.println("Informe o tipo da obra pretendida: ");
                 String tipo = this.sc.nextLine();
                 
                 cs.solicitarObra(clienteLogado, endereco, tipo);
-                break;
-            case 2: 
+            }
+            case 2 -> { 
                 System.out.println("=== OBRAS DO "+clienteLogado.getNome()+" ===");
                 
                 List<Obra> obras = new ArrayList<>();
@@ -40,18 +39,19 @@ public class ClienteController {
                 
                 for (Obra o : obras){
                     System.out.println("=== OBRA #" + o.getId()+ " ===");
-                    System.out.println("Endereço: R$ " + o.getEndereco());
+                    System.out.println("Endereço: " + o.getEndereco());
                     System.out.println("Tipo da obra: " + o.getTipoObra());
                     System.out.println("Status: "+ o.getStatus());
                     System.out.println("");
                 }
-                break;
-            case 3: 
+            }
+            case 3 -> { 
                 System.out.println("=== EDITAR DADOS ===");
                 
                 System.out.println("Insira o id da obra que deseja editar: ");
                 int id = this.sc.nextInt();
                 Obra obra = os.retornarObraPorID(id);
+                this.sc.nextLine();
                 
                 System.out.println("=== ATUALIZANDO DADOS DA OBRA #" + id + " ===");
                 
@@ -64,14 +64,13 @@ public class ClienteController {
                 System.out.print("Tipo da obra [" + obra.getTipoObra()+ "]: ");
                 entrada = this.sc.nextLine();
                 if (!entrada.isEmpty()) obra.setTipoObra(entrada);
-
-                os.atualizarObra(obra);
                 
-                break;
-            case 0:
+                os.atualizarObra(obra);
+            }
+            case 0 -> {
                 System.out.println("Saindo...");
                 System.exit(0);
-                break;
+            }
         }
     }
 

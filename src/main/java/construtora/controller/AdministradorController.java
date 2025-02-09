@@ -152,10 +152,6 @@ public class AdministradorController {
                 entrada = this.scanner.nextLine();
                 if (!entrada.isEmpty()) cliente.setTelefone(entrada);
                 
-                System.out.print("Papel [" + cliente.getPapel() + "]: ");
-                entrada = this.scanner.nextLine();
-                if (!entrada.isEmpty()) cliente.setPapel(entrada);
-                
                 System.out.print("Senha [********]: ");
                 entrada = this.scanner.nextLine();
                 if (!entrada.isEmpty()) cliente.setSenha(PasswordUtils.criptografarSenha(entrada));
@@ -172,6 +168,7 @@ public class AdministradorController {
                 
                 ClienteDAO cd = new ClienteDAO();
                 cd.delete(cpf);
+                cd.close();
                 
                 System.out.print("Cliente deleado com sucesso!");
             }
@@ -183,11 +180,15 @@ public class AdministradorController {
                 
                 Cliente cliente = clienteService.recuperarCliente(cpf);
                 
-                System.out.println("Cliente #" + cliente.getId());
-                System.out.println("Nome: " + cliente.getNome());
-                System.out.println("Cpf: " + cliente.getCpf());
-                System.out.println("Telefone: " + cliente.getTelefone());
-                System.out.println("Papel: " + cliente.getPapel());
+                if (cliente == null) {
+                    System.out.println("Cliente não existe!");
+                }
+                else {
+                    System.out.println("Cliente #" + cliente.getId());
+                    System.out.println("Nome: " + cliente.getNome());
+                    System.out.println("Cpf: " + cliente.getCpf());
+                    System.out.println("Telefone: " + cliente.getTelefone() + "\n");
+                }
             }
             case 5 -> {
                 System.out.println("=== TODOS OS CLIENTES ===");
@@ -198,8 +199,7 @@ public class AdministradorController {
                     System.out.println("Cliente #" + c.getId());
                     System.out.println("Nome: " + c.getNome());
                     System.out.println("Cpf: " + c.getCpf());
-                    System.out.println("Telefone: "+ c.getTelefone());
-                    System.out.println("Papel: " + c.getPapel());
+                    System.out.println("Telefone: "+ c.getTelefone() + "\n");
                 }
             }
         }   
@@ -234,13 +234,9 @@ public class AdministradorController {
                 entrada = this.scanner.nextLine();
                 if (!entrada.isEmpty()) construtor.setTelefone(entrada);
                 
-                System.out.println("Tipo serviço [" + construtor.getTipoServico() + "]: ");
+                System.out.println("Tipo de serviço [" + construtor.getTipoServico() + "]: ");
                 entrada = this.scanner.nextLine();
                 if (!entrada.isEmpty()) construtor.setTipoServico(entrada);
-                
-                System.out.print("Papel [" + construtor.getPapel() + "]: ");
-                entrada = this.scanner.nextLine();
-                if (!entrada.isEmpty()) construtor.setPapel(entrada);
                 
                 System.out.print("Senha [********]: ");
                 entrada = this.scanner.nextLine();
@@ -257,6 +253,7 @@ public class AdministradorController {
                 
                 ConstrutorDAO cd = new ConstrutorDAO();
                 cd.delete(cpf);
+                cd.close();
             }
             case 4 -> {
                 System.out.println("=== BUSCAR CONSTRUTOR POR CPF ===");
@@ -266,12 +263,16 @@ public class AdministradorController {
                 
                 Construtor construtor = construtorService.recuperarConstrutor(cpf);
                 
-                System.out.println("Construtor #" + construtor.getId());
-                System.out.println("Nome: " + construtor.getNome());
-                System.out.println("Cpf: " + construtor.getCpf());
-                System.out.println("Telefone: " + construtor.getTelefone());
-                System.out.println("Tipo de serviço: " + construtor.getTipoServico());
-                System.out.println("Papel: " + construtor.getPapel());
+                if (construtor == null) {
+                    System.out.println("Construtor não existe!");
+                }
+                else {
+                    System.out.println("Construtor #" + construtor.getId());
+                    System.out.println("Nome: " + construtor.getNome());
+                    System.out.println("Cpf: " + construtor.getCpf());
+                    System.out.println("Telefone: " + construtor.getTelefone());
+                    System.out.println("Tipo de serviço: " + construtor.getTipoServico() + "\n");
+                }
             }
             case 5 -> {
                 System.out.println("=== TODOS OS CONSTRUTORES ===");
@@ -282,8 +283,7 @@ public class AdministradorController {
                     System.out.println("Nome: " + c.getNome());
                     System.out.println("Cpf: " + c.getCpf());
                     System.out.println("Telefone: "+ c.getTelefone());
-                    System.out.println("Tipo de serviço: " + c.getTipoServico());
-                    System.out.println("Papel: " + c.getPapel());
+                    System.out.println("Tipo de serviço: " + c.getTipoServico() + "\n");
                 }
             }
         }
@@ -325,22 +325,16 @@ public class AdministradorController {
                 entrada = this.scanner.nextLine();
                 if (!entrada.isEmpty()) funcionario.setCargo(entrada);
                 
-                System.out.println("Construtor [" + funcionario.getConstrutor().getNome()+ "]:");
+                System.out.println("CPF do Construtor [" + funcionario.getConstrutor().getNome()+ "]:");
                 entrada = this.scanner.nextLine();
                 if (!entrada.isEmpty()){
-                    System.out.println("Informe o CPF do construtor: ");
-                    String cpfC = scanner.nextLine();
-                    Construtor construtor = construtorService.recuperarConstrutor(cpfC);
+                    Construtor construtor = construtorService.recuperarConstrutor(entrada);
                     funcionario.setConstrutor(construtor);
                 }
 
                 System.out.print("Telefone [" + funcionario.getTelefone() + "]: ");
                 entrada = this.scanner.nextLine();
                 if (!entrada.isEmpty()) funcionario.setTelefone(entrada);
-                
-                System.out.print("Papel [" + funcionario.getPapel() + "]: ");
-                entrada = this.scanner.nextLine();
-                if (!entrada.isEmpty()) funcionario.setPapel(entrada);
                 
                 System.out.print("Senha [********]: ");
                 entrada = this.scanner.nextLine();
@@ -357,6 +351,7 @@ public class AdministradorController {
                 
                 FuncionarioDAO fd = new FuncionarioDAO();
                 fd.delete(cpf);
+                fd.close();
             }
             case 4 -> {
                 System.out.println("=== BUSCAR FUNCIONÁRIO POR CPF ===");
@@ -366,13 +361,17 @@ public class AdministradorController {
                 
                 Funcionario funcionario = funcionarioService.recuperarFuncionario(cpf);
                 
-                System.out.println("Funcionário #" + funcionario.getId());
-                System.out.println("Nome: " + funcionario.getNome());
-                System.out.println("Cpf: " + funcionario.getCpf());
-                System.out.println("Cargo: " + funcionario.getCargo());
-                System.out.println("Construtor: " + funcionario.getConstrutor().getNome());
-                System.out.println("Telefone: " + funcionario.getTelefone());
-                System.out.println("Papel: " + funcionario.getPapel());   
+                if (funcionario == null) {
+                    System.out.println("Funcionário não existe!");
+                }
+                else {
+                    System.out.println("Funcionário #" + funcionario.getId());
+                    System.out.println("Nome: " + funcionario.getNome());
+                    System.out.println("Cpf: " + funcionario.getCpf());
+                    System.out.println("Cargo: " + funcionario.getCargo());
+                    System.out.println("Construtor: " + funcionario.getConstrutor().getNome());
+                    System.out.println("Telefone: " + funcionario.getTelefone() + "\n");
+                }
             }
             case 5 -> {
                 System.out.println("=== TODOS OS FUNCIONÁRIOS ===");
@@ -384,8 +383,7 @@ public class AdministradorController {
                     System.out.println("Cpf: " + f.getCpf());
                     System.out.println("Cargo: " + f.getCargo());
                     System.out.println("Construtor: " + f.getConstrutor().getNome());
-                    System.out.println("Telefone: " + f.getTelefone());
-                    System.out.println("Papel: " + f.getPapel());
+                    System.out.println("Telefone: " + f.getTelefone() + "\n");
                 }
             }
         }
@@ -428,10 +426,6 @@ public class AdministradorController {
                 entrada = this.scanner.nextLine();
                 if (!entrada.isEmpty()) engenheiro.setTelefone(entrada);
                 
-                System.out.print("Papel [" + engenheiro.getPapel() + "]: ");
-                entrada = this.scanner.nextLine();
-                if (!entrada.isEmpty()) engenheiro.setPapel(entrada);
-                
                 System.out.print("Senha [********]: ");
                 entrada = this.scanner.nextLine();
                 if (!entrada.isEmpty()) engenheiro.setSenha(PasswordUtils.criptografarSenha(entrada));
@@ -447,6 +441,7 @@ public class AdministradorController {
                 
                 EngenheiroDAO ed = new EngenheiroDAO();
                 ed.delete(cpf);
+                ed.close();
             }
             case 4 -> {
                 System.out.println("=== BUSCAR ENGENHEIRO POR CPF ===");
@@ -456,12 +451,16 @@ public class AdministradorController {
                 
                 Engenheiro engenheiro = engenheiroService.recuperarEngenheiro(cpf);
                 
-                System.out.println("Engenheiro #" + engenheiro.getId());
-                System.out.println("CREA: " + engenheiro.getCrea());
-                System.out.println("Nome: " + engenheiro.getNome());
-                System.out.println("Cpf: " + engenheiro.getCpf());
-                System.out.println("Telefone: " + engenheiro.getTelefone());
-                System.out.println("Papel: " + engenheiro.getPapel());
+                if (engenheiro == null) {
+                    System.out.println("Engenheiro não existe!");
+                }
+                else {
+                    System.out.println("Engenheiro #" + engenheiro.getId());
+                    System.out.println("CREA: " + engenheiro.getCrea());
+                    System.out.println("Nome: " + engenheiro.getNome());
+                    System.out.println("Cpf: " + engenheiro.getCpf());
+                    System.out.println("Telefone: " + engenheiro.getTelefone() + "\n");
+                }
             }
             case 5 -> {
                 System.out.println("=== TODOS OS ENGENHEIROS ===");
@@ -474,7 +473,6 @@ public class AdministradorController {
                     System.out.println("Nome: " + e.getNome());
                     System.out.println("Cpf: " + e.getCpf());
                     System.out.println("Telefone: " + e.getTelefone());
-                    System.out.println("Papel: " + e.getPapel());
                 }
                 
             }
@@ -523,7 +521,7 @@ public class AdministradorController {
                     System.out.println("Endereço: " + obra.getEndereco());
                     System.out.println("Tipo de obra: " + obra.getTipoObra());
                     System.out.println("Status atual: " + obra.getStatus());
-                    System.out.println("Cliente: " + obra.getCliente());
+                    System.out.println("Cliente: " + obra.getCliente().getNome() + "\n");
                 }
             }
             
@@ -668,14 +666,19 @@ public class AdministradorController {
                 
                 System.out.println("=== BUSCANDO CONTRATOS FINALIZADOS ===");
                 
-                for (Contrato c : contratos) {
-                    System.out.println("== DETALHES DO CONTRATO " + c.getId() + " ==");
-                    System.out.println("Valor: " + c.getValor());
-                    System.out.println("Data de início: " + c.getDataInicio());
-                    System.out.println("Data de fim: " + c.getDataFim());
-                    System.out.println("Engenheiro: " + c.getEngenheiro().getNome());
-                    System.out.println("Construtor: " + c.getConstrutor().getNome());
-                    System.out.println("Obra: #" + c.getObra().getId() + "\n");
+                if (contratos.isEmpty()) {
+                    System.out.println("Não existem contratos finalizados no momento!\n");
+                }
+                else {
+                    for (Contrato c : contratos) {
+                        System.out.println("== DETALHES DO CONTRATO " + c.getId() + " ==");
+                        System.out.println("Valor: " + c.getValor());
+                        System.out.println("Data de início: " + c.getDataInicio());
+                        System.out.println("Data de fim: " + c.getDataFim());
+                        System.out.println("Engenheiro: " + c.getEngenheiro().getNome());
+                        System.out.println("Construtor: " + c.getConstrutor().getNome());
+                        System.out.println("Obra: #" + c.getObra().getId() + "\n");
+                    }
                 }
             }
             
@@ -686,14 +689,19 @@ public class AdministradorController {
                 
                 System.out.println("=== BUSCANDO CONTRATOS EM ANDAMENTO ===");
                 
-                for (Contrato c : contratos) {
-                    System.out.println("== DETALHES DO CONTRATO " + c.getId() + " ==");
-                    System.out.println("Valor: " + c.getValor());
-                    System.out.println("Data de início: " + c.getDataInicio());
-                    System.out.println("Data de fim: " + c.getDataFim());
-                    System.out.println("Engenheiro: " + c.getEngenheiro().getNome());
-                    System.out.println("Construtor: " + c.getConstrutor().getNome());
-                    System.out.println("Obra: #" + c.getObra().getId() + "\n");
+                if (contratos.isEmpty()) {
+                    System.out.println("Não existem contratos em andamento no momento!\n");
+                }
+                else {
+                    for (Contrato c : contratos) {
+                        System.out.println("== DETALHES DO CONTRATO " + c.getId() + " ==");
+                        System.out.println("Valor: " + c.getValor());
+                        System.out.println("Data de início: " + c.getDataInicio());
+                        System.out.println("Data de fim: " + c.getDataFim());
+                        System.out.println("Engenheiro: " + c.getEngenheiro().getNome());
+                        System.out.println("Construtor: " + c.getConstrutor().getNome());
+                        System.out.println("Obra: #" + c.getObra().getId() + "\n");
+                    }
                 }
             }
             
@@ -704,14 +712,19 @@ public class AdministradorController {
                 
                 System.out.println("=== BUSCANDO CONTRATOS FUTUROS ===");
                 
-                for (Contrato c : contratos) {
-                    System.out.println("== DETALHES DO CONTRATO " + c.getId() + " ==");
-                    System.out.println("Valor: " + c.getValor());
-                    System.out.println("Data de início: " + c.getDataInicio());
-                    System.out.println("Data de fim: " + c.getDataFim());
-                    System.out.println("Engenheiro: " + c.getEngenheiro().getNome());
-                    System.out.println("Construtor: " + c.getConstrutor().getNome());
-                    System.out.println("Obra: #" + c.getObra().getId() + "\n");
+                if (contratos.isEmpty()) {
+                    System.out.println("Não existem contratos futuros no momento!\n");
+                }
+                else {
+                    for (Contrato c : contratos) {
+                        System.out.println("== DETALHES DO CONTRATO " + c.getId() + " ==");
+                        System.out.println("Valor: " + c.getValor());
+                        System.out.println("Data de início: " + c.getDataInicio());
+                        System.out.println("Data de fim: " + c.getDataFim());
+                        System.out.println("Engenheiro: " + c.getEngenheiro().getNome());
+                        System.out.println("Construtor: " + c.getConstrutor().getNome());
+                        System.out.println("Obra: #" + c.getObra().getId() + "\n");
+                    }
                 }
             }
         }
@@ -766,5 +779,9 @@ public class AdministradorController {
         LocalDate data = LocalDate.parse(input, inputFormatter);
         
         return data;
+    }
+    
+    public Administrador buscarAdministrador (String cpf) {
+        return administradorService.recuperarAdministrador(cpf);
     }
 }

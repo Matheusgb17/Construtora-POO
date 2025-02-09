@@ -1,0 +1,18 @@
+===========================================
+      CONTRATO DE PRESTAÇÃO DE SERVIÇOS     
+===========================================
+
+Data: 09/02/2025
+ID da Obra: 2
+Engenheiro: Engenheiro Padrão
+Construtor: Construtor Padrão
+Valor: 45612.0
+Data de início: 09/01/2025
+Data de fim: 16/03/2025
+
+Pelo presente instrumento, a empresa se compromete a realizar a obra nos termos estabelecidos.
+
+-------------------------------------------
+Assinatura do Cliente: ___________________
+
+Assinatura da Empresa: ___________________

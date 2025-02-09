@@ -185,7 +185,6 @@ public class ContratoDAO {
 
         try (PreparedStatement stmt = conexao.prepareStatement(sql)) {
             stmt.setDate(1, Date.valueOf(LocalDate.now()));
-            stmt.setDate(2, Date.valueOf(LocalDate.now()));
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
                     Contrato contrato = buildContratoFromResultSet(rs);

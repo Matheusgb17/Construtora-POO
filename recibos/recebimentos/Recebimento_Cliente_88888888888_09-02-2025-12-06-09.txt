@@ -1,0 +1,16 @@
+===========================================
+            RECIBO DE RECEBIMENTO           
+===========================================
+
+Data: 09/02/2025
+CPF do Construtor: 88888888888
+Nome do Construtor: Cliente Padrão
+Descrição: pagamento
+Valor: R$ 123,00
+
+A construtora confirma o recebimento do cliente acima pelo serviço prestado.
+
+-------------------------------------------
+Assinatura do Cliente: ___________________
+
+Assinatura da Construtora: ___________________

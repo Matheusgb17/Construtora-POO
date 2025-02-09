@@ -85,7 +85,6 @@ public class ConstrutorDAO {
                         rsConstrutor.getString("senha"),
                         rsConstrutor.getString("papel")
                     );
-                        System.out.println("Construtor encontrado com sucesso!" + construtor.getId());
                     return construtor;
                 }
             }
@@ -135,7 +134,6 @@ public class ConstrutorDAO {
                     rsUsuario.getString("senha"),
                     rsUsuario.getString("papel")
                 );
-                System.out.println("Construtor: " + construtor.getNome());
                 return construtor;
             }
         } catch (SQLException e) {

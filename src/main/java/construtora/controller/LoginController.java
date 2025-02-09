@@ -14,29 +14,39 @@ public class LoginController {
     private ClienteService cs = new ClienteService();
     private Scanner scanner = new Scanner(System.in);
     
-    public Usuario opcoesLogin () {
-        Usuario usuarioLogado = new Usuario();
+    public Usuario opcoesLogin() {
+        Usuario usuarioLogado = null; // Agora inicia como null
         int opcao;
-        
+
         do {
             System.out.println("1 - Login");
             System.out.println("2 - Sair");
             System.out.print("Digite: ");
             opcao = scanner.nextInt();
-            
+
             switch (opcao) {
                 case 1 -> {
-                    usuarioLogado = this.login();
+                    usuarioLogado = this.login(); // Pode ser null
+                    if (usuarioLogado == null) {
+                        System.out.println("Erro no login. Tente novamente.");
+                    }
                 }
-                
+
                 case 2 -> {
                     System.out.println("Saindo!");
                     System.exit(0);
                 }
+                default -> {
+                    System.out.println("Opção inválida!");
+                }
             }
+        } while (opcao != 2 && usuarioLogado == null);
+
+        if (usuarioLogado == null) {
+            System.out.println("Erro: Nenhum usuário logado!");
+            System.exit(1); // Evita retornar null e causar erro depois
         }
-        while (opcao != 2 && usuarioLogado == null);
-        
+
         return usuarioLogado;
     }
     
